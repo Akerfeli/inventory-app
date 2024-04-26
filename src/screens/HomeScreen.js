@@ -9,7 +9,7 @@ const HomeScreen = () => {
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text>Home</Text>
       <Button
-        title="Go to Item List"
+        title="Go to Item Screen"
         onPress={() => navigation.navigate("Item List")}
       />
     </View>
