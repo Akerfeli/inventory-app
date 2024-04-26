@@ -42,8 +42,8 @@ const Breadcrumbs = ({ currentScreenTitle, previousScreenTitle }) => {
       {previousScreenTitle && (
         <>
           <Text style={styles.separator}>/</Text>
-          <TouchableOpacity onPress={handleGoBack} style={styles.screenTitle}>
-            <Text>{previousScreenTitle}</Text>
+          <TouchableOpacity onPress={handleGoBack}>
+            <Text style={styles.screenTitle}>{previousScreenTitle}</Text>
           </TouchableOpacity>
         </>
       )}
@@ -67,14 +67,15 @@ const styles = StyleSheet.create({
   },
   separator: {
     marginHorizontal: 10,
+    color: "#ccc",
   },
   ellipsis: {
-    marginHorizontal: 5,
-    color: "grey",
+    marginHorizontal: 4,
+    color: "#aaa",
   },
   screenTitle: {
     marginRight: 0,
-    color: "grey",
+    color: "#888",
   },
   bold: {
     fontWeight: "bold",
