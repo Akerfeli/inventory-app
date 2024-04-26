@@ -31,8 +31,8 @@ const HomeScreen = () => {
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text>Home</Text>
         <Button
-          title="Go to Item Screen"
-          onPress={() => navigation.navigate("Item")}
+          title="Go to Item Folder"
+          onPress={() => navigation.navigate("Item Folder", { depth: 1 })}
         />
       </View>
     </SafeAreaView>

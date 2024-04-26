@@ -8,6 +8,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import AddNewScreen from "./src/screens/AddNewScreen";
 import HomeScreen from "./src/screens/HomeScreen";
+import ItemFolderScreen from "./src/screens/ItemFolderScreen";
 import ItemListScreen from "./src/screens/ItemScreen";
 import ShoppingScreen from "./src/screens/ShoppingScreen";
 
@@ -25,6 +26,7 @@ function HomeStack() {
         }}
       />
       <Stack.Screen name="Item" component={ItemListScreen} />
+      <Stack.Screen name="Item Folder" component={ItemFolderScreen} />
     </Stack.Navigator>
   );
 }
