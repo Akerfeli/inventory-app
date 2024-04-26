@@ -18,7 +18,14 @@ const ItemListScreen = () => {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 16,
+      }}
+    >
       <Breadcrumbs
         currentScreenTitle={`Folder ${depth}`}
         previousScreenTitle={previousScreenTitle}

@@ -58,7 +58,7 @@ export default function App() {
               tabBarIcon: ({ focused, color, size }) => (
                 <MaterialCommunityIcons
                   name="plus-circle"
-                  size={size + 16}
+                  size={size + 8}
                   color={color}
                 />
               ),
