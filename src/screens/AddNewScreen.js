@@ -7,7 +7,7 @@ const AddNewScreen = () => {
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>ItemList</Text>
+      <Text>Add new</Text>
       <Button
         title="Add new"
         onPress={() => navigation.navigate("Item List")}
