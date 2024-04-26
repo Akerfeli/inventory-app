@@ -10,7 +10,7 @@ const HomeScreen = () => {
       <Text>Home</Text>
       <Button
         title="Go to Item Screen"
-        onPress={() => navigation.navigate("Item List")}
+        onPress={() => navigation.navigate("Item")}
       />
     </View>
   );

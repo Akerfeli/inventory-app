@@ -56,7 +56,9 @@ export default function App() {
               ),
             }}
           />
-          <Tab.Screen name="Shopping List" component={ShoppingScreen}
+          <Tab.Screen
+            name="Shopping List"
+            component={ShoppingScreen}
             options={{
               tabBarIcon: ({ focused, color, size }) => (
                 <MaterialCommunityIcons
