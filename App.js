@@ -17,7 +17,13 @@ const Tab = createBottomTabNavigator();
 function HomeStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="Item" component={ItemListScreen} />
     </Stack.Navigator>
   );
