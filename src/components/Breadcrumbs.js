@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
-import { MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 const Breadcrumbs = ({ currentScreenTitle, previousScreenTitle }) => {
