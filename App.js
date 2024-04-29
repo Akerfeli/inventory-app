@@ -2,10 +2,12 @@ import { MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React from "react";
+import { collection, getDocs } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import { db } from "./firebaseConfig";
 import AddNewScreen from "./src/screens/AddNewScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import ItemFolderScreen from "./src/screens/ItemFolderScreen";
@@ -32,6 +34,26 @@ function HomeStack() {
 }
 
 export default function App() {
+  /* TEST FOR DATABASE, DELETE IN FUTURE */
+  const [folders, setFolders] = useState([""]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "folders"));
+        querySnapshot.forEach((doc) => {
+          console.log(`${doc.id} =>`, doc.data());
+        });
+        setFolders(querySnapshot);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  /*-------------------*/
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
