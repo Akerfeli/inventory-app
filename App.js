@@ -13,29 +13,49 @@ import HomeScreen from "./src/screens/HomeScreen";
 import ItemFolderScreen from "./src/screens/ItemFolderScreen";
 import ItemListScreen from "./src/screens/ItemScreen";
 import ShoppingScreen from "./src/screens/ShoppingScreen";
+import SignInScreen from "./src/screens/SignInScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function HomeStack() {
+  const [isSignedIn, setIsSignedIn] = useState(false);
+
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen name="Item" component={ItemListScreen} />
-      <Stack.Screen name="Item Folder" component={ItemFolderScreen} />
+      {!isSignedIn ? (
+        // No token found, user isn't signed in
+        <Stack.Screen
+          name="SignIn"
+          component={SignInScreen}
+          options={{
+            title: "Sign in",
+            // When logging out, a pop animation feels intuitive
+            // You can remove this if you want the default 'push' animation
+            animationTypeForReplace: isSignedIn ? "pop" : "push",
+          }}
+        />
+      ) : (
+        // User is signed in
+        <>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen name="Item" component={ItemListScreen} />
+          <Stack.Screen name="Item Folder" component={ItemFolderScreen} />
+        </>
+      )}
     </Stack.Navigator>
   );
 }
 
 export default function App() {
-  /* TEST FOR DATABASE, DELETE IN FUTURE */
-  const [folders, setFolders] = useState([""]);
+  /* isSignedIn FOR DATABASE, DELETE IN FUTURE */
+  /*   const [folders, setFolders] = useState([""]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +71,7 @@ export default function App() {
     };
 
     fetchData();
-  }, []);
+  }, []); */
   /*-------------------*/
 
   return (
