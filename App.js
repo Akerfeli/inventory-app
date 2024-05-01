@@ -57,7 +57,6 @@ function AppContent() {
             component={SignInScreen}
             options={{
               title: "Sign in",
-              animationTypeForReplace: userState.isSignedIn ? "pop" : "push",
             }}
           />
         </Stack.Navigator>

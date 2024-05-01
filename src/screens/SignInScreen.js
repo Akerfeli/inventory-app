@@ -7,7 +7,7 @@ import { useAuth } from "../contexts/AuthContext";
 const SignInScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signIn, signUp, userState } = useAuth();
+  const { signIn, signUp } = useAuth();
 
   const handleSignIn = async () => {
     try {
