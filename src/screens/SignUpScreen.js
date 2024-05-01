@@ -1,42 +1,31 @@
-import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 import React, { useState } from "react";
-import { Button, View } from "react-native";
+import { View, Button } from "react-native";
 import { Input } from "react-native-elements";
 
 import { useAuth } from "../contexts/AuthContext";
 
-const SignInScreen = () => {
+const SignUpScreen = () => {
   const [showEmailError, setShowEmailError] = useState(false);
   const [showPasswordError, setShowPasswordError] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signIn } = useAuth();
-  const navigation = useNavigation();
+  const { signUp } = useAuth();
 
-  const handleSignIn = async () => {
+  const handleSignUp = async () => {
     if (email === "" || password === "") {
+      console.log(email);
+      console.log(password);
       setShowEmailError(email === "");
       setShowPasswordError(password === "");
       return;
     }
-
     try {
-      await signIn(email, password);
-      console.log("User signed in with email: ", email);
+      await signUp(email, password);
+      console.log("User created with email:", email);
     } catch (error) {
-      console.log(error);
-      if (error.code === "auth/invalid-credential") {
-        setShowEmailError(email === "");
-        setShowPasswordError(password === "");
-        alert("The user doesn't exist or the password is wrong.");
-      }
+      console.log(error.message);
     }
   };
-
-  const handleSignUp = () => {
-    navigation.navigate("SignUp");
-  };
-
   return (
     <View>
       <Input
@@ -59,10 +48,9 @@ const SignInScreen = () => {
         secureTextEntry={true}
         errorMessage={showPasswordError ? "Cannot be empty" : null}
       />
-      <Button title="Login" onPress={() => handleSignIn()} />
       <Button title="Create account" onPress={() => handleSignUp()} />
     </View>
   );
 };
 
-export default SignInScreen;
+export default SignUpScreen;
