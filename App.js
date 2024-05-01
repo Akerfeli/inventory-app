@@ -2,17 +2,17 @@ import { MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { collection, getDocs } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { db } from "./firebaseConfig";
+import { AuthProvider, useAuth } from "./src/contexts/AuthContext";
 import AddNewScreen from "./src/screens/AddNewScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import ItemFolderScreen from "./src/screens/ItemFolderScreen";
 import ItemListScreen from "./src/screens/ItemScreen";
 import ShoppingScreen from "./src/screens/ShoppingScreen";
+import SignInScreen from "./src/screens/SignInScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -34,29 +34,33 @@ function HomeStack() {
 }
 
 export default function App() {
-  /* TEST FOR DATABASE, DELETE IN FUTURE */
-  const [folders, setFolders] = useState([""]);
+  return (
+    <AuthProvider>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <AppContent />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </AuthProvider>
+  );
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "folders"));
-        querySnapshot.forEach((doc) => {
-          console.log(`${doc.id} =>`, doc.data());
-        });
-        setFolders(querySnapshot);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-  /*-------------------*/
+function AppContent() {
+  const { userState } = useAuth();
 
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
+    <>
+      {!userState.isSignedIn ? (
+        <Stack.Navigator>
+          <Stack.Screen
+            name="SignIn"
+            component={SignInScreen}
+            options={{
+              title: "Sign in",
+            }}
+          />
+        </Stack.Navigator>
+      ) : (
         <Tab.Navigator screenOptions={{ tabBarShowLabel: false }}>
           <Tab.Screen
             name="HomeStack"
@@ -100,8 +104,8 @@ export default function App() {
             }}
           />
         </Tab.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
+      )}
+    </>
   );
 }
 
