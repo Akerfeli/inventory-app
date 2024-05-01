@@ -1,4 +1,10 @@
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 import React, { createContext, useContext, useState } from "react";
+
+import { auth } from "../../firebaseConfig";
 
 const AuthContext = createContext();
 
@@ -7,20 +13,61 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [userState, setUserState] = useState({
+    id: "",
+    email: "",
+    isSignedIn: false,
+  });
 
-  const signIn = () => {
-    setIsSignedIn(true);
-    // Perform any additional sign-in logic if needed
+  const signIn = async (email, password) => {
+    try {
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredentials.user;
+      setUserState((prevState) => ({
+        ...prevState,
+        id: user.uid,
+        email: user.email,
+        isSignedIn: true,
+      }));
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const signUp = async (email, password) => {
+    try {
+      const userCredentials = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredentials.user;
+      setUserState((prevState) => ({
+        ...prevState,
+        id: user.uid,
+        email: user.email,
+        isSignedIn: true,
+      }));
+    } catch (error) {
+      throw error;
+    }
   };
 
   const signOut = () => {
-    setIsSignedIn(false);
-    // Perform any additional sign-out logic if needed
+    setUserState((prevState) => ({
+      ...prevState,
+      id: "",
+      email: "",
+      isSignedIn: false,
+    }));
   };
 
   return (
-    <AuthContext.Provider value={{ isSignedIn, signIn, signOut }}>
+    <AuthContext.Provider value={{ userState, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );

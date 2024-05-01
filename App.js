@@ -46,18 +46,18 @@ export default function App() {
 }
 
 function AppContent() {
-  const { isSignedIn, signIn, signOut } = useAuth();
+  const { userState } = useAuth();
 
   return (
     <>
-      {!isSignedIn ? (
+      {!userState.isSignedIn ? (
         <Stack.Navigator>
           <Stack.Screen
             name="SignIn"
             component={SignInScreen}
             options={{
               title: "Sign in",
-              animationTypeForReplace: isSignedIn ? "pop" : "push",
+              animationTypeForReplace: userState.isSignedIn ? "pop" : "push",
             }}
           />
         </Stack.Navigator>
