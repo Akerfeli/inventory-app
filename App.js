@@ -3,17 +3,16 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import { StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AuthProvider, useAuth } from "./src/contexts/AuthContext";
+import { Colors } from "./src/globalStyles";
 import AddNewScreen from "./src/screens/AddNewScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import ItemFolderScreen from "./src/screens/ItemFolderScreen";
 import ItemListScreen from "./src/screens/ItemScreen";
 import ShoppingScreen from "./src/screens/ShoppingScreen";
 import SignInScreen from "./src/screens/SignInScreen";
-import { Colors } from "./src/globalStyles";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -114,12 +113,3 @@ function AppContent() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
