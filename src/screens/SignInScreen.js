@@ -1,5 +1,5 @@
-import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
-import React, { useState } from "react";
+import { useNavigation, useIsFocused } from "@react-navigation/native"; // Import useNavigation hook
+import React, { useState, useEffect } from "react";
 import { Button, View } from "react-native";
 import { Input } from "react-native-elements";
 
@@ -12,6 +12,15 @@ const SignInScreen = () => {
   const [password, setPassword] = useState("");
   const { signIn } = useAuth();
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+
+  // Reset error state when the screen is focused, so if we go to
+  // Sign In -> Sign Up -> Sign In again there arent any error messages lingering
+
+  useEffect(() => {
+    setShowEmailError(false);
+    setShowPasswordError(false);
+  }, [isFocused]);
 
   const handleSignIn = async () => {
     if (email === "" || password === "") {
@@ -60,7 +69,7 @@ const SignInScreen = () => {
         errorMessage={showPasswordError ? "Cannot be empty" : null}
       />
       <Button title="Login" onPress={() => handleSignIn()} />
-      <Button title="Create account" onPress={() => handleSignUp()} />
+      <Button title="Sign Up" onPress={() => handleSignUp()} />
     </View>
   );
 };
