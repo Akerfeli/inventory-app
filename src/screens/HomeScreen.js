@@ -4,9 +4,12 @@ import React, { useState } from "react";
 import { Button, View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAuth } from "../contexts/AuthContext";
+
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState();
+  const { signOut } = useAuth();
 
   const updateSearch = (query) => {
     setSearchQuery(query);
@@ -34,6 +37,7 @@ const HomeScreen = () => {
           title="Go to Item Folder"
           onPress={() => navigation.navigate("Item Folder", { depth: 1 })}
         />
+        <Button title="Logout" onPress={() => signOut()} />
       </View>
     </SafeAreaView>
   );

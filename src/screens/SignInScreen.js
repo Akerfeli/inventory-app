@@ -7,13 +7,14 @@ import { Button, View } from "react-native";
 import { Input } from "react-native-elements";
 
 import { auth } from "../../firebaseConfig";
+import { useAuth } from "../contexts/AuthContext";
 
 const SignInScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  /*  const auth = auth; */
+  const { signIn } = useAuth();
 
-  const signIn = async () => {
+  const handleSignIn = async () => {
     try {
       const userCredentials = await signInWithEmailAndPassword(
         auth,
@@ -21,14 +22,15 @@ const SignInScreen = () => {
         password
       );
       const user = userCredentials.user;
-      console.log("User signed in: ", user);
+      signIn();
+      console.log("User signed in with email: ", user.email);
     } catch (error) {
       alert("Sign in failed");
       console.log(error.message);
     }
   };
 
-  const signUp = async () => {
+  const handleSignUp = async () => {
     try {
       const userCredentials = await createUserWithEmailAndPassword(
         auth,
@@ -36,7 +38,8 @@ const SignInScreen = () => {
         password
       );
       const user = userCredentials.user;
-      console.log("User created:", user);
+      signIn(true);
+      console.log("User created with email:", user.email);
     } catch (error) {
       alert("Creating account failed");
       console.log("Sign up failed" + error.message);
@@ -46,21 +49,21 @@ const SignInScreen = () => {
   return (
     <View>
       <Input
-        /*   label="Your Email Adress" */
         placeholder="email@adress.com"
         leftIcon={{ name: "mail", type: "ionicon" }}
+        autoCapitalize="none"
         onChangeText={(text) => setEmail(text)}
       />
 
       <Input
-        /*    label="Your Password" */
         placeholder="Password"
         leftIcon={{ name: "lock-closed", type: "ionicon" }}
         onChangeText={(text) => setPassword(text)}
+        autoCapitalize="none"
         secureTextEntry={true}
       />
-      <Button title="login" onPress={() => signIn()} />
-      <Button title="Create account" onPress={() => signUp()} />
+      <Button title="Login" onPress={() => handleSignIn()} />
+      <Button title="Create account" onPress={() => handleSignUp()} />
     </View>
   );
 };
