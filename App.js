@@ -13,13 +13,19 @@ import HomeScreen from "./src/screens/HomeScreen";
 import ItemFolderScreen from "./src/screens/ItemFolderScreen";
 import ItemListScreen from "./src/screens/ItemScreen";
 import ShoppingScreen from "./src/screens/ShoppingScreen";
+import { Colors } from "./src/globalStyles";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function HomeStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerTintColor: Colors.primary,
+        headerTitleStyle: { color: Colors.heading },
+      }}
+    >
       <Stack.Screen
         name="Home"
         component={HomeScreen}
@@ -67,7 +73,7 @@ export default function App() {
                 <Octicons
                   name="home"
                   size={size + 1}
-                  color={color}
+                  color={focused ? Colors.primary : "#ccc"}
                   style={{ marginTop: 1 }}
                 />
               ),
@@ -81,7 +87,7 @@ export default function App() {
                 <MaterialCommunityIcons
                   name="plus-circle"
                   size={size + 8}
-                  color={color}
+                  color={focused ? Colors.primary : "#ccc"}
                 />
               ),
             }}
@@ -94,7 +100,7 @@ export default function App() {
                 <MaterialCommunityIcons
                   name="shopping-outline"
                   size={size + 4}
-                  color={color}
+                  color={focused ? Colors.primary : "#ccc"}
                 />
               ),
             }}
