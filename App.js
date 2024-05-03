@@ -33,7 +33,13 @@ function HomeStack() {
         }}
       />
       <Stack.Screen name="Item" component={ItemListScreen} />
-      <Stack.Screen name="Item Folder" component={ItemFolderScreen} />
+      <Stack.Screen
+        name="Item Folder"
+        component={ItemFolderScreen}
+        options={({ route }) => ({
+          title: route.params.title,
+        })}
+      />
     </Stack.Navigator>
   );
 }
