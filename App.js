@@ -3,10 +3,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import { StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AuthProvider, useAuth } from "./src/contexts/AuthContext";
+import { Colors } from "./src/globalStyles";
 import AddNewScreen from "./src/screens/AddNewScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import ItemFolderScreen from "./src/screens/ItemFolderScreen";
@@ -20,7 +20,12 @@ const Tab = createBottomTabNavigator();
 
 function HomeStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerTintColor: Colors.primary,
+        headerTitleStyle: { color: Colors.heading },
+      }}
+    >
       <Stack.Screen
         name="Home"
         component={HomeScreen}
@@ -29,7 +34,13 @@ function HomeStack() {
         }}
       />
       <Stack.Screen name="Item" component={ItemListScreen} />
-      <Stack.Screen name="Item Folder" component={ItemFolderScreen} />
+      <Stack.Screen
+        name="Item Folder"
+        component={ItemFolderScreen}
+        options={({ route }) => ({
+          title: route.params.title,
+        })}
+      />
     </Stack.Navigator>
   );
 }
@@ -79,7 +90,7 @@ function AppContent() {
                 <Octicons
                   name="home"
                   size={size + 1}
-                  color={color}
+                  color={focused ? Colors.primary : "#ccc"}
                   style={{ marginTop: 1 }}
                 />
               ),
@@ -93,7 +104,7 @@ function AppContent() {
                 <MaterialCommunityIcons
                   name="plus-circle"
                   size={size + 8}
-                  color={color}
+                  color={focused ? Colors.primary : "#ccc"}
                 />
               ),
             }}
@@ -106,7 +117,7 @@ function AppContent() {
                 <MaterialCommunityIcons
                   name="shopping-outline"
                   size={size + 4}
-                  color={color}
+                  color={focused ? Colors.primary : "#ccc"}
                 />
               ),
             }}
@@ -116,12 +127,3 @@ function AppContent() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
