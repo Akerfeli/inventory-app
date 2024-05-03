@@ -4,10 +4,22 @@ import { TouchableWithoutFeedback, View, Text, StyleSheet } from "react-native";
 import AmountButton from "./AmountButton";
 
 const ObjectListItem = ({ item, itemId, onEditPressed, changeAmount }) => {
+  const renderLeftContainer = () => {
+    return (
+      <View style={styles.leftContainer}>
+        <View style={styles.imageContainer} />
+        <View style={styles.textContainer}>
+          <Text style={styles.label}>{item.name}</Text>
+          <Text style={styles.description}>{item.name}</Text>
+        </View>
+      </View>
+    );
+  };
+
   const renderRightContainer = () => {
     return (
       <View style={[styles.rightContainer]}>
-        <AmountButton amount={item.amount} changeAmount={console.log("test")} />
+        <AmountButton amount={item.amount} changeAmount />
       </View>
     );
   };
@@ -15,13 +27,7 @@ const ObjectListItem = ({ item, itemId, onEditPressed, changeAmount }) => {
   return (
     <TouchableWithoutFeedback onPress={() => onEditPressed(itemId)}>
       <View style={styles.container}>
-        <View style={styles.leftContainer}>
-          <View style={styles.imageContainer} />
-          <View style={styles.textContainer}>
-            <Text style={styles.label}>{item.name}</Text>
-            <Text style={styles.description}>{item.name}</Text>
-          </View>
-        </View>
+        {renderLeftContainer()}
         {renderRightContainer()}
       </View>
     </TouchableWithoutFeedback>
