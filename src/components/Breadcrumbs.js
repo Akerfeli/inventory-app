@@ -31,7 +31,7 @@ const Breadcrumbs = ({ currentScreenTitle, previousScreenTitle }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={handleNavigateHome} style={styles.icon}>
-        <MaterialCommunityIcons name="home-variant" size={20} color="gray" />
+        <MaterialCommunityIcons name="home-variant" size={20} color="#999" />
       </TouchableOpacity>
       {showEllipses && (
         <>
@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
     paddingVertical: 8,
+    width: "100%",
   },
   icon: {
     marginRight: 0,
