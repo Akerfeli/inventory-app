@@ -34,7 +34,10 @@ const SignInScreen = () => {
       console.log("User signed in with email: ", email);
     } catch (error) {
       console.log(error);
-      if (error.code === "auth/invalid-credential") {
+      if (
+        error.code === "auth/invalid-credential" ||
+        error.code === "auth/too-many-requests"
+      ) {
         setShowEmailError(email === "");
         setShowPasswordError(password === "");
         alert("The user doesn't exist or the password is wrong.");

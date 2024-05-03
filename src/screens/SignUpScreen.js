@@ -13,8 +13,6 @@ const SignUpScreen = () => {
 
   const handleSignUp = async () => {
     if (email === "" || password === "") {
-      console.log(email);
-      console.log(password);
       setShowEmailError(email === "");
       setShowPasswordError(password === "");
       return;
