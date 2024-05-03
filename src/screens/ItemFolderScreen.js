@@ -4,9 +4,8 @@ import { View } from "react-native";
 
 import Breadcrumbs from "../components/Breadcrumbs";
 import FolderContent from "../components/FolderContent";
-import { Spacing } from "../globalStyles";
 
-const ItemListScreen = () => {
+const ItemFolderScreen = () => {
   const route = useRoute();
   const { previousScreenTitle, title } = route.params;
 
@@ -16,7 +15,7 @@ const ItemListScreen = () => {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        padding: Spacing.m,
+        padding: 8,
         backgroundColor: "white",
       }}
     >
@@ -29,4 +28,4 @@ const ItemListScreen = () => {
   );
 };
 
-export default ItemListScreen;
+export default ItemFolderScreen;
