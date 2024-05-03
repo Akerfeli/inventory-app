@@ -35,7 +35,7 @@ const HomeScreen = () => {
         <Text>Home</Text>
         <Button
           title="Go to Item Folder"
-          onPress={() => navigation.navigate("Item Folder", { depth: 1 })}
+          onPress={() => navigation.navigate("Item Folder", { title: "Test" })}
         />
         <Button title="Logout" onPress={() => signOut()} />
       </View>
