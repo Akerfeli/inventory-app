@@ -19,7 +19,10 @@ const ObjectListItem = ({ item, itemId, onEditPressed, changeAmount }) => {
   const renderRightContainer = () => {
     return (
       <View style={[styles.rightContainer]}>
-        <AmountButton amount={item.amount} changeAmount />
+        <AmountButton
+          amount={item.amount}
+          changeAmount={(newAmount) => changeAmount(itemId, newAmount)}
+        />
       </View>
     );
   };
