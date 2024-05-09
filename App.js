@@ -7,7 +7,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AuthProvider, useAuth } from "./src/contexts/AuthContext";
 import { Colors } from "./src/globalStyles";
+import AccountScreen from "./src/screens/AccountScreen";
 import AddNewScreen from "./src/screens/AddNewScreen";
+import FavoritesScreen from "./src/screens/FavoritesScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import ItemFolderScreen from "./src/screens/ItemFolderScreen";
 import ItemListScreen from "./src/screens/ItemScreen";
@@ -89,9 +91,22 @@ function AppContent() {
               tabBarIcon: ({ focused, color, size }) => (
                 <Octicons
                   name="home"
-                  size={size + 1}
+                  size={size - 1}
                   color={focused ? Colors.primary : "#ccc"}
                   style={{ marginTop: 1 }}
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Favorites"
+            component={FavoritesScreen}
+            options={{
+              tabBarIcon: ({ focused, color, size }) => (
+                <Octicons
+                  name="heart"
+                  size={size}
+                  color={focused ? Colors.primary : "#ccc"}
                 />
               ),
             }}
@@ -114,10 +129,25 @@ function AppContent() {
             component={ShoppingScreen}
             options={{
               tabBarIcon: ({ focused, color, size }) => (
-                <MaterialCommunityIcons
-                  name="shopping-outline"
-                  size={size + 4}
+                <Octicons
+                  name="checklist"
+                  size={size - 1}
                   color={focused ? Colors.primary : "#ccc"}
+                  style={{ marginTop: 2 }}
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Account"
+            component={AccountScreen}
+            options={{
+              tabBarIcon: ({ focused, color, size }) => (
+                <Octicons
+                  name="person"
+                  size={size + 1}
+                  color={focused ? Colors.primary : "#ccc"}
+                  style={{ marginTop: 1 }}
                 />
               ),
             }}
