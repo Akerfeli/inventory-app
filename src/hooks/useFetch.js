@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 
 const useFetch = ({ firebaseFunction }) => {
   const [data, setData] = useState(null);
@@ -6,13 +6,14 @@ const useFetch = ({ firebaseFunction }) => {
   const [error, setError] = useState(null);
 
   // Did not help
-  const memoizedFunction = useMemo(() => firebaseFunction, [firebaseFunction]);
-
+  /*  const memoizedFunction = useMemo(() => firebaseFunction, [firebaseFunction]); */
+  const firebasefunctionRef = useRef(firebaseFunction);
   useEffect(() => {
+    console.log("In useEffect! ");
     const fetchData = async () => {
       try {
         setLoading(true);
-        const fetchedData = await memoizedFunction();
+        const fetchedData = await firebasefunctionRef.current();
         setData(fetchedData);
         setError(null);
       } catch (error) {
@@ -23,7 +24,7 @@ const useFetch = ({ firebaseFunction }) => {
     };
 
     fetchData();
-  }, [memoizedFunction]);
+  }, [firebasefunctionRef.current]);
 
   return { data, loading, error };
 };
