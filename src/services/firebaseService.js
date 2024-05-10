@@ -36,9 +36,57 @@ export const getRootFolderContent = async (uid) => {
 
 export const getAllFolders = async (uid) => {
   try {
-    const q = query(
+    // Step 1: Retrieve all folders
+    const folderQuery = query(
       collection(db, "folder-data"),
       where("createdBy", "==", uid)
+    );
+    const folderQuerySnapshot = await getDocs(folderQuery);
+
+    const folders = [];
+    folderQuerySnapshot.forEach((folderDoc) => {
+      folders.push({
+        id: folderDoc.id,
+        ...folderDoc.data(),
+      });
+    });
+
+    // Step 2: Fetch subfolders for each folder
+    for (const folder of folders) {
+      const subfolderQuery = query(
+        collectionGroup(db, "subfolders"),
+        where("folderId", "==", folder.id)
+      );
+      const subfolderQuerySnapshot = await getDocs(subfolderQuery);
+
+      const subfolders = [];
+      subfolderQuerySnapshot.forEach((subfolderDoc) => {
+        const subfolderData = {
+          id: subfolderDoc.id,
+          ...subfolderDoc.data(),
+        };
+        subfolders.push(subfolderData);
+        // Log subfolder data
+        /* console.log("Subfolder Data:", subfolderData); */
+      });
+
+      folder.subfolders = subfolders;
+
+      // Log folder with subfolders
+      /*  console.log("Folder:", folder); */
+    }
+
+    return folders;
+  } catch (error) {
+    console.error("Error fetching response:", error);
+  }
+};
+
+export const getFolderContent = async (documentId) => {
+  try {
+    const q = query(
+      collection(db, "folder-data"),
+      where("__name__", "==", documentId)
     );
 
     const querySnapshot = await getDocs(q);
@@ -57,8 +105,6 @@ export const getAllFolders = async (uid) => {
     console.error("Error fetching response:", error);
   }
 };
-
-export const getFolderContent = () => {};
 
 export const getItemsToBuy = async (uid) => {
   const q = query(
