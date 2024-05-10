@@ -1,89 +1,85 @@
 import { useNavigation } from "@react-navigation/native";
-import { CheckBox } from "@rneui/themed";
-import React, { useState, useMemo } from "react";
+import { ListItem, Button } from "@rneui/themed";
+import React from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 
 import FolderListItem from "./FolderListItem";
 import ObjectListItem from "./ObjectListItem";
 
-const FolderContent = ({ folderId }) => {
+const FolderContent = ({
+  folderData,
+  folderName,
+  onDeleteFolder,
+  onDeleteItem,
+}) => {
   const navigation = useNavigation();
-  const [sortByName, setSortByName] = useState(false);
-  const [mockData, setMockData] = useState({
-    id: folderId,
-    name: "Folder 1",
-    objects: [
-      { id: "1", name: "Object a", amount: 1 },
-      { id: "2", name: "Object c", amount: 2 },
-      { id: "3", name: "Object b", amount: 3 },
-    ],
-    subfolders: [
-      { id: "subfolder1", name: "Subfolder 2" },
-      { id: "subfolder2", name: "Subfolder 1" },
-    ],
-  });
 
-  // TODO: Move? Maybe we should let the parent handle the data, and let this component handle the rendering.
-  const sortedContent = useMemo(() => {
-    // Add type field for easier distinction
-    const sortedObjects = mockData.objects.map((item) => ({
-      ...item,
-      type: "object",
-    }));
-    const sortedSubfolders = mockData.subfolders.map((item) => ({
-      ...item,
-      type: "subfolder",
-    }));
-
-    const sortByNameFunction = (a, b) => a.name.localeCompare(b.name);
-
-    if (sortByName) {
-      sortedObjects.sort(sortByNameFunction);
-      sortedSubfolders.sort(sortByNameFunction);
-    }
-
-    return sortedSubfolders.concat(sortedObjects); // Shows folders on top, should we mix them?
-  }, [mockData, sortByName]);
-
-  const handleNextFolder = (folderId) => {
-    const title = mockData.subfolders.find((item) => item.id === folderId).name;
-
+  const handleNextFolder = (folder) => {
     navigation.push("Item Folder", {
-      title,
-      folderId,
-      key: folderId,
-      previousScreenTitle: mockData.name,
+      title: folder.name,
+      folderId: folder.id,
+      key: folder.id,
+      previousScreenTitle: folderName,
     });
   };
 
-  const renderItem = ({ item }) => {
-    if (item.type === "object") {
-      return <ObjectListItem item={item} />; //TODO: add the other fields
+  const handleDelete = (itemId, itemType) => {
+    if (itemType === "folder") {
+      onDeleteFolder(itemId);
     } else {
-      return (
-        <FolderListItem
-          folderId={item.id}
-          folderName={item.name}
-          onPress={handleNextFolder}
-        />
-      );
+      onDeleteItem(itemId);
     }
+  };
+
+  const renderSwipeableItem = ({ item }) => {
+    const handlePress = () => {
+      if (item.type === "folder") {
+        handleNextFolder(item);
+      } else {
+        // ToDo: move press item to here from FolderListItem
+      }
+    };
+
+    const handleDeletePress = () => {
+      handleDelete(item.id, item.type);
+    };
+
+    const rightContent = (
+      <Button
+        title="Delete"
+        onPress={handleDeletePress}
+        icon={{ name: "delete", color: "white" }}
+        buttonStyle={{ minHeight: "100%", backgroundColor: "#f86666" }}
+      />
+    );
+
+    return (
+      <ListItem.Swipeable
+        rightContent={rightContent}
+        containerStyle={{ padding: 0 }}
+      >
+        {item.type === "folder" ? (
+          <FolderListItem
+            folderId={item.id}
+            folderName={item.name}
+            onPress={handlePress}
+          />
+        ) : (
+          <ObjectListItem
+            item={item}
+            onPress={handlePress}
+            onDelete={handleDelete}
+          />
+        )}
+      </ListItem.Swipeable>
+    );
   };
 
   return (
     <View style={{ flex: 1, width: "100%" }}>
-      {/*TODO: Move the checkbox to a filter dropdown/modal in the parent */}
-      <CheckBox
-        checked={sortByName}
-        onPress={() => setSortByName(!sortByName)}
-        title="Sort by name"
-        containerStyle={{
-          backgroundColor: "rgba(0,0,0,0)",
-        }}
-      />
       <FlatList
-        data={sortedContent}
-        renderItem={renderItem}
+        data={folderData}
+        renderItem={renderSwipeableItem}
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />

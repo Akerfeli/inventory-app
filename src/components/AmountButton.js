@@ -8,17 +8,29 @@ import {
 } from "react-native";
 
 const AmountButton = ({ amount, changeAmount }) => {
+  const decreaseAmount = () => {
+    // Don't allow negative values
+    if (amount > 0) {
+      changeAmount(amount - 1);
+    }
+  };
+
   return (
     <View style={[styles.amountContainer, styles.flexEnd]}>
       <TouchableOpacity
-        onPress={() => changeAmount(amount - 1)}
+        onPress={decreaseAmount}
         style={[styles.buttonContainer, { alignItems: "flex-end" }]}
       >
         <Text style={styles.buttonText}>-</Text>
       </TouchableOpacity>
       <TextInput
         value={amount.toString()}
-        onChangeText={(text) => changeAmount(parseInt(text))}
+        onChangeText={(text) => {
+          const value = parseInt(text);
+          if (!isNaN(value)) {
+            changeAmount(value >= 0 ? value : 0); // Don't allow negative values
+          }
+        }}
         style={styles.input}
         keyboardType="numeric"
       />
@@ -31,6 +43,7 @@ const AmountButton = ({ amount, changeAmount }) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   amountContainer: {
     flexDirection: "row",
