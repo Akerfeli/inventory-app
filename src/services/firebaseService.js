@@ -8,6 +8,7 @@ import {
 
 import { db } from "../../firebaseConfig";
 
+// ToDo: Refactor the code and reuse some parts
 export const getRootFolderContent = async (uid) => {
   try {
     const q = query(
@@ -25,6 +26,7 @@ export const getRootFolderContent = async (uid) => {
         ...doc.data(),
       });
     });
+    console.log("From firebaseService.js ", data);
 
     return data;
   } catch (error) {
