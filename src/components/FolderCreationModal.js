@@ -6,6 +6,7 @@ import {
   View,
   Text,
   Modal,
+  StyleSheet,
 } from "react-native";
 
 const FolderCreationModal = ({
@@ -28,7 +29,6 @@ const FolderCreationModal = ({
     }
 
     // ToDo: add folder to db here
-
     // Set loading state
     setIsLoading(true);
 
@@ -48,7 +48,7 @@ const FolderCreationModal = ({
 
   const renderButtonRow = () => {
     return (
-      <View style={{ flexDirection: "row", gap: 32, justifyContent: "center" }}>
+      <View style={styles.buttonRow}>
         <TouchableOpacity onPress={onClose}>
           <Text>Cancel</Text>
         </TouchableOpacity>
@@ -68,26 +68,8 @@ const FolderCreationModal = ({
       visible={modalVisible}
       onRequestClose={onClose}
     >
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-        }}
-      >
-        <View
-          style={{
-            backgroundColor: "white",
-            borderRadius: 8,
-            padding: 16,
-            width: "80%",
-            minHeight: 168,
-            flexDirection: "column",
-            justifyContent: "space-between",
-            gap: 8,
-          }}
-        >
+      <View style={styles.backdrop}>
+        <View style={styles.container}>
           <Text>Add folder</Text>
           {isLoading ? (
             <>
@@ -115,5 +97,29 @@ const FolderCreationModal = ({
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  backdrop: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  container: {
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 16,
+    width: "80%",
+    minHeight: 168,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    gap: 8,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    gap: 32,
+    justifyContent: "center",
+  },
+});
 
 export default FolderCreationModal;
