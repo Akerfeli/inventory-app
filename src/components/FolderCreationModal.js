@@ -1,5 +1,5 @@
 import { Input } from "@rneui/themed";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TouchableOpacity,
   ActivityIndicator,
@@ -8,6 +8,8 @@ import {
   Modal,
   StyleSheet,
 } from "react-native";
+
+import { Styles, Colors } from "../globalStyles";
 
 const FolderCreationModal = ({
   parentFolder,
@@ -19,6 +21,16 @@ const FolderCreationModal = ({
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
+
+  useEffect(() => {
+    if (modalVisible) {
+      // Reset modal state when it becomes visible
+      setInputError("");
+      setError("");
+      setIsLoading(false);
+      setName("");
+    }
+  }, [modalVisible]);
 
   const handleAddFolder = () => {
     // Reset any previous error
@@ -50,11 +62,11 @@ const FolderCreationModal = ({
     return (
       <View style={styles.buttonRow}>
         <TouchableOpacity onPress={onClose}>
-          <Text>Cancel</Text>
+          <Text style={Styles.textLink}>Cancel</Text>
         </TouchableOpacity>
         {!error && (
           <TouchableOpacity onPress={handleAddFolder}>
-            <Text>Add Folder</Text>
+            <Text style={Styles.textLink}>Add Folder</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -70,22 +82,23 @@ const FolderCreationModal = ({
     >
       <View style={styles.backdrop}>
         <View style={styles.container}>
-          <Text>Add folder</Text>
+          <Text style={Styles.heading}>Add folder</Text>
           {isLoading ? (
             <>
-              <ActivityIndicator size="large" />
+              <ActivityIndicator size="large" color={Colors.primary} />
               <View>{/* For displaying the layout correctly */}</View>
             </>
           ) : (
             <>
               {error ? (
-                <Text style={{ color: "red" }}>{error}</Text>
+                <Text style={{ color: Colors.error }}>{error}</Text>
               ) : (
                 <Input
                   value={name}
                   onChangeText={setName}
                   placeholder="Folder name"
                   errorMessage={inputError}
+                  errorStyle={{ color: Colors.error }}
                   inputStyle={{ fontSize: 14 }}
                 />
               )}
@@ -118,7 +131,7 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: "row",
     gap: 32,
-    justifyContent: "center",
+    justifyContent: "space-around",
   },
 });
 

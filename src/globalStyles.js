@@ -6,7 +6,7 @@ const Colors = {
   secondary: "#AAD3C6",
   tertiary: "#D4F0E4",
   accent: "#F6A497",
-  error: "#dc3545",
+  error: "#ec4555",
   heading: "#0C2F3B",
   text: "#0C2F3B",
   textMid: "#999",
@@ -14,11 +14,6 @@ const Colors = {
   bgPrimary: "#F5F0E8",
   bgSecondary: "#f8f9fa",
   yellowFlag: "#FFD162",
-};
-
-const Fonts = {
-  regular: "Roboto-Regular",
-  bold: "Roboto-Bold",
 };
 
 const Styles = StyleSheet.create({
@@ -30,18 +25,16 @@ const Styles = StyleSheet.create({
   },
   textPrimary: {
     color: Colors.text,
-    fontFamily: Fonts.regular,
     fontSize: 16,
   },
   textSecondary: {
     color: Colors.textLight,
-    fontFamily: Fonts.regular,
     fontSize: 14,
   },
   heading: {
     color: Colors.heading,
-    fontFamily: Fonts.bold,
-    fontSize: 20,
+    fontWeight: "bold",
+    fontSize: 16,
     marginBottom: 8,
   },
   primaryButton: {
@@ -54,9 +47,13 @@ const Styles = StyleSheet.create({
   },
   primaryButtonText: {
     color: "#fff",
-    fontFamily: Fonts.bold,
-    fontSize: 16,
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+  textLink: {
+    color: Colors.primary,
+    fontSize: 14,
   },
 });
 
-export { Colors, Fonts, Styles };
+export { Colors, Styles };
