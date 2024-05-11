@@ -25,7 +25,8 @@ function HomeStack() {
     <Stack.Navigator
       screenOptions={{
         headerTintColor: Colors.primary,
-        headerTitleStyle: { color: Colors.heading },
+        headerTitleAlign: "center",
+        headerTitleStyle: { color: Colors.heading, fontSize: 16 },
       }}
     >
       <Stack.Screen
@@ -82,7 +83,14 @@ function AppContent() {
           />
         </Stack.Navigator>
       ) : (
-        <Tab.Navigator screenOptions={{ tabBarShowLabel: false }}>
+        <Tab.Navigator
+          screenOptions={{
+            tabBarShowLabel: false,
+            headerTintColor: Colors.primary,
+            headerTitleStyle: { fontSize: 16 },
+            headerTitleAlign: "center",
+          }}
+        >
           <Tab.Screen
             name="HomeStack"
             component={HomeStack}

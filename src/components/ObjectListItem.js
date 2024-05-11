@@ -10,7 +10,14 @@ const ObjectListItem = ({ item, itemId, onEditPressed, changeAmount }) => {
         <View style={styles.imageContainer} />
         <View style={styles.textContainer}>
           <Text style={styles.label}>{item.name}</Text>
-          <Text style={styles.description}>{item.name}</Text>
+          <Text
+            style={styles.description}
+            numberOfLines={2}
+            ellipsizeMode="tail"
+          >
+            {/*ToDo: fix indentation which currently adds a space to the description text*/}
+            {item.description}
+          </Text>
         </View>
       </View>
     );
@@ -65,13 +72,16 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flexDirection: "column",
-    gap: 4,
+    maxWidth: "70%",
   },
   label: {
     fontWeight: "bold",
   },
   description: {
     color: "#bbb",
+    fontSize: 12,
+    overflow: "hidden",
+    height: 40,
   },
 });
 
