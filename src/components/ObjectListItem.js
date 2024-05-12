@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   description: {
     color: "#bbb",
-    fontSize: 12,
+    fontSize: 14,
     overflow: "hidden",
     height: 40,
   },
