@@ -16,6 +16,7 @@ import ItemListScreen from "./src/screens/ItemScreen";
 import ShoppingScreen from "./src/screens/ShoppingScreen";
 import SignInScreen from "./src/screens/SignInScreen";
 import SignUpScreen from "./src/screens/SignUpScreen";
+import "react-native-reanimated";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
