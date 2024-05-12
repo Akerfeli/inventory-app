@@ -13,9 +13,14 @@ const ItemFolderScreen = () => {
     id: 0,
     name: "Folder 1",
     items: [
-      { id: "1", name: "Object a", amount: 1 },
-      { id: "2", name: "Object c", amount: 2 },
-      { id: "3", name: "Object b", amount: 3 },
+      { id: "1", name: "Object a", amount: 1, description: " Description 1" },
+      {
+        id: "2",
+        name: "Object c",
+        amount: 2,
+        description: " Description 2 is a very long description for testing. ",
+      },
+      { id: "3", name: "Object b", amount: 3, description: "" },
     ],
     subfolders: [
       { id: "subfolder1", name: "Subfolder 2" },
