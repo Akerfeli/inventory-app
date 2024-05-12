@@ -4,7 +4,10 @@ import { TouchableOpacity, View, Text } from "react-native";
 
 const FolderListItem = ({ folderId, folderName, onPress }) => {
   return (
-    <TouchableOpacity onPress={() => onPress(folderId)}>
+    <TouchableOpacity
+      style={{ width: "100%" }}
+      onPress={() => onPress(folderId)}
+    >
       <View
         style={{
           height: 56,
