@@ -76,7 +76,7 @@ export const getAllFolders = async (uid) => {
   return folders;
 };
 
-/*----------------------- DELETE -----------------------*/
+/*----------------------- DELETES -----------------------*/
 
 export const deleteItem = async (collectionPath, documentId) => {
   // Check if the document exists
