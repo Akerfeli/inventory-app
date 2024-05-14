@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 const Colors = {
   primaryDark: "#0C2F3B",
   primary: "#357E77",
-  secondary: "#AAD3C6",
+  secondary: "#9AD0C1",
   tertiary: "#D4F0E4",
   accent: "#F6A497",
   error: "#ec4555",
@@ -44,7 +44,7 @@ const Styles = StyleSheet.create({
   },
   primaryButton: {
     backgroundColor: Colors.primary,
-    height: 32,
+    height: 40,
     width: "100%",
     borderRadius: 16,
     alignItems: "center",
