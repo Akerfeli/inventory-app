@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderColor: "#bbb",
     borderWidth: 1,
+    width: 40 + 24 + 24, //ToDo: maybe we can change it so that we don't need this?
   },
   buttonContainer: {
     height: 36,
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
   },
   input: {
     textAlign: "center",
-    minWidth: 40,
+    width: 40,
     height: 36,
     fontSize: 16,
   },

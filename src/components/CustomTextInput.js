@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput } from "react-native";
 
-import { Colors } from "../globalStyles";
+import { Colors, Styles } from "../globalStyles";
 
 const CustomTextInput = ({
   value,
@@ -11,16 +11,23 @@ const CustomTextInput = ({
   error = "",
   rows = 1,
 }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
   return (
     <View styles={styles.container}>
-      <Text style={styles.labelText}>{label ? label : null}</Text>
+      <Text style={[Styles.textLabel]}>{label ? label : null}</Text>
       <TextInput
         value={value}
         onChangeText={(text) => onChangeText(text)}
         placeholder={placeholder}
         placeholderTextColor="#aaa"
         multiline={rows > 1}
-        style={styles.textInput}
+        style={[
+          styles.textInput,
+          isFocused ? styles.inputOnFocus : styles.inputOnBlur,
+        ]}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
       />
       <Text style={styles.errorText}>{error ? error : null}</Text>
     </View>
@@ -33,14 +40,21 @@ const styles = StyleSheet.create({
   },
   textInput: {
     padding: 10, // ToDo: height = rows*something?
+    backgroundColor: "white",
+    fontSize: 16,
+    borderRadius: 16,
+    height: 40,
+    borderWidth: 2,
   },
-  labelText: {
-    fontWeight: "bold",
+  inputOnFocus: {
+    borderColor: Colors.secondary, // Change border color when focused
+  },
+  inputOnBlur: {
+    borderColor: "white",
   },
   errorText: {
     color: Colors.error,
     fontSize: 12,
   },
 });
-
 export default CustomTextInput;

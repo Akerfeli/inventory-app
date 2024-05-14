@@ -40,6 +40,7 @@ const Styles = StyleSheet.create({
     color: Colors.text,
     fontWeight: "bold",
     fontSize: 12,
+    marginBottom: 4,
   },
   heading: {
     color: Colors.heading,
