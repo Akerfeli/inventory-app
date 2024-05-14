@@ -1,4 +1,4 @@
-import { ListItem, CheckBox, Button } from "@rneui/themed";
+import { ListItem, CheckBox, Button, Icon } from "@rneui/themed";
 import React from "react";
 import {
   View,
@@ -76,11 +76,24 @@ const ShoppingScreen = () => {
 
     return (
       <ListItem.Swipeable
+        rightWidth={176}
+        containerStyle={{
+          padding: 0,
+          paddingVertical: 16,
+          paddingHorizontal: 8,
+        }}
         rightContent={
           <Button
             title="Remove from list"
             onPress={() => removeItemFromShoppingList(listItem.item.id)}
-            icon={{ name: "delete", color: "white" }}
+            icon={
+              <Icon
+                name="playlist-remove"
+                type="material-icons"
+                color="white"
+                size={24}
+              />
+            }
             buttonStyle={{
               minHeight: "100%",
               backgroundColor: Colors.secondary,
@@ -95,7 +108,12 @@ const ShoppingScreen = () => {
               checked={item.ShoppingListStatus === "toBuy"}
               onPress={() => toggleItemCheck(item.id, item.ShoppingListStatus)}
               size={32}
-              containerStyle={{ margin: 0 }}
+              checkedColor={Colors.primary}
+              containerStyle={{
+                margin: 0,
+                marginLeft: 0,
+                marginRight: 0,
+              }}
             />
           </View>
           <View style={{ flex: 1 }}>
@@ -111,16 +129,34 @@ const ShoppingScreen = () => {
   };
 
   return (
-    <View style={{ flex: 1, width: "100%" }}>
+    <View style={{ flex: 1, width: "100%", alignItems: "center" }}>
+      <TouchableOpacity
+        style={[
+          Styles.primaryButton,
+          {
+            width: "90%",
+            marginTop: 8,
+            marginBottom: 8,
+            flexDirection: "row",
+            gap: 8,
+          },
+        ]}
+        onPress={removeCompleted}
+      >
+        <Icon
+          name="playlist-add-check"
+          type="material-icons"
+          color="white"
+          size={24}
+        />
+        <Text style={Styles.primaryButtonText}>Remove checked items</Text>
+      </TouchableOpacity>
       <FlatList
         data={mockData}
         renderItem={renderSwipeableItem}
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
-      <TouchableOpacity style={Styles.primaryButton} onPress={removeCompleted}>
-        <Text style={Styles.primaryButtonText}>Remove checked items</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -134,7 +170,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    height: 56,
+    height: 48,
   },
   checkboxContainer: {
     justifyContent: "center",
