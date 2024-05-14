@@ -4,9 +4,12 @@ import {
   query,
   where,
   collectionGroup,
+  runTransaction,
   doc,
   deleteDoc,
   getDoc,
+  Timestamp,
+  serverTimestamp,
 } from "firebase/firestore";
 
 import { db } from "../../firebaseConfig";
@@ -89,5 +92,42 @@ export const deleteItem = async (collectionPath, documentId) => {
     console.log("Document deleted successfully with id: ", documentId);
   } else {
     console.log("Document does not exist with id: ", documentId);
+  }
+};
+
+/*----------------------- POSTS -----------------------*/
+
+export const createFolder = async (folderName, parentId, uid) => {
+  try {
+    let folderRef = "";
+    await runTransaction(db, async (transaction) => {
+      // Step 1: Create the folder document at the first level
+      folderRef = doc(db, "folder-data"); // Use a collection reference to generate an auto ID
+      const folderData = {
+        name: folderName,
+        createdBy: uid,
+        parentId, // Assuming you pass the parent folder ID as an argument
+        subfolders: [], // Initialize subfolders array
+        items: [],
+        timestamp: serverTimestamp(),
+      };
+      transaction.set(folderRef, folderData);
+
+      // Step 2: Create a reference to the folder in the parent folder's document
+      const parentFolderRef = doc(db, "folder-data", parentId);
+      const subfolderData = {
+        name: folderName,
+        folderId: folderRef.id, // Use the auto-generated ID of the newly created folder
+        timestamp: folderRef.timestamp,
+      };
+      transaction.set(
+        doc(parentFolderRef.collection("subfolders")),
+        subfolderData
+      );
+    });
+    console.log("Transaction successfully committed!");
+    return folderRef.id;
+  } catch (error) {
+    console.error("Transaction failed: ", error);
   }
 };
