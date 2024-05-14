@@ -56,7 +56,7 @@ const FolderContent = ({
     return (
       <ListItem.Swipeable
         rightContent={rightContent}
-        containerStyle={{ padding: 0 }}
+        containerStyle={{ padding: 0, paddingLeft: 4 }}
       >
         {item.type === "folder" ? (
           <FolderListItem
