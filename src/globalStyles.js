@@ -11,6 +11,7 @@ const Colors = {
   text: "#0C2F3B",
   textMid: "#999",
   textLight: "#f8f9fa",
+  textError: "#FF5733",
   bgPrimary: "#F5F0E8",
   bgSecondary: "#f8f9fa",
   yellowFlag: "#FFD162",
@@ -20,8 +21,12 @@ const Styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.bgPrimary,
-    paddingHorizontal: 16,
+    paddingHorizontal: 25,
     paddingVertical: 16,
+  },
+  centerItemsContainer: {
+    flex: 1,
+    alignItems: "center",
   },
   textPrimary: {
     color: Colors.text,
@@ -44,6 +49,7 @@ const Styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 5,
   },
   primaryButtonText: {
     color: "#fff",
