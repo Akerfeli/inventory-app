@@ -4,9 +4,12 @@ import {
   query,
   where,
   collectionGroup,
+  runTransaction,
   doc,
   deleteDoc,
   getDoc,
+  setDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 
 import { db } from "../../firebaseConfig";
@@ -48,10 +51,11 @@ export const getFolderContent = async (documentId) => {
 };
 
 export const getItemsToBuy = async (uid) => {
+  const statuses = ["toBuy", "completed"];
   const q = query(
     collectionGroup(db, "items"),
     where("createdBy", "==", uid),
-    where("shoppingList", "==", true)
+    where("shoppingListStatus", "in", statuses)
   );
   return await fetchData(q);
 };
@@ -88,5 +92,60 @@ export const deleteItem = async (collectionPath, documentId) => {
     console.log("Document deleted successfully with id: ", documentId);
   } else {
     console.log("Document does not exist with id: ", documentId);
+  }
+};
+
+/*----------------------- POSTS -----------------------*/
+
+export const createFolder = async (folderName, parentId, uid) => {
+  try {
+    let folderRef = "";
+    await runTransaction(db, async (transaction) => {
+      // Step 1: Create the folder document at the first level
+      folderRef = doc(db, "folder-data"); // Use a collection reference to generate an auto ID
+      const folderData = {
+        name: folderName,
+        createdBy: uid,
+        parentId, // Assuming you pass the parent folder ID as an argument
+        timeCreated: serverTimestamp(),
+      };
+      transaction.set(folderRef, folderData);
+
+      // Step 2: Create a reference to the folder in the parent folder's document
+      const parentFolderRef = doc(db, "folder-data", parentId);
+      const subfolderData = {
+        name: folderName,
+        folderId: folderRef.id, // Use the auto-generated ID of the newly created folder
+        timestamp: folderRef.timeCreated,
+      };
+      transaction.set(
+        doc(parentFolderRef.collection("subfolders")),
+        subfolderData
+      );
+    });
+    console.log("Transaction successfully committed!");
+    return folderRef.id;
+  } catch (error) {
+    console.error("Transaction failed: ", error);
+  }
+};
+
+export const createRootFolder = async (uid) => {
+  try {
+    const folderCollectionRef = collection(db, "folder-data"); // Reference to the collection
+    const folderRef = doc(folderCollectionRef); // Reference to a new document in the collection
+    const folderData = {
+      name: "root",
+      createdBy: uid,
+      parentId: null,
+      timeCreated: serverTimestamp(),
+    };
+
+    await setDoc(folderRef, folderData);
+    console.log("Root folder created successfully for user:", uid);
+    return folderRef.id;
+  } catch (error) {
+    console.error("Error creating root folder:", error);
+    // Handle error appropriately, e.g., notify the user, retry, etc.
   }
 };
