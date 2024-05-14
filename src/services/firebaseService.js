@@ -48,10 +48,11 @@ export const getFolderContent = async (documentId) => {
 };
 
 export const getItemsToBuy = async (uid) => {
+  const statuses = ["toBuy", "completed"];
   const q = query(
     collectionGroup(db, "items"),
     where("createdBy", "==", uid),
-    where("shoppingList", "==", true)
+    where("shoppingListStatus", "in", statuses)
   );
   return await fetchData(q);
 };
