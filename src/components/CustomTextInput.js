@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     height: 40,
     borderWidth: 2,
+    marginBottom: 4,
   },
   inputOnFocus: {
     borderColor: Colors.secondary, // Change border color when focused

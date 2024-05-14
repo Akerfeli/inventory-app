@@ -2,6 +2,8 @@ import { Icon } from "@rneui/themed";
 import React from "react";
 import { TouchableOpacity, View, Text } from "react-native";
 
+import { Colors } from "../globalStyles";
+
 const FolderListItem = ({ folderId, folderName, onPress }) => {
   return (
     <TouchableOpacity
@@ -20,7 +22,7 @@ const FolderListItem = ({ folderId, folderName, onPress }) => {
         <Icon
           name="folder-outline"
           type="material-community"
-          color="grey"
+          color={Colors.secondary}
           size={32}
         />
         <Text style={{ fontWeight: "bold" }}>{folderName}</Text>

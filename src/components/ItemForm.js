@@ -4,7 +4,7 @@ import { TouchableOpacity, View, Text } from "react-native";
 
 import AmountButton from "./AmountButton";
 import CustomTextInput from "./CustomTextInput";
-import { Styles } from "../globalStyles";
+import { Styles, Colors } from "../globalStyles";
 
 const ItemForm = ({ onSubmit, onReset, initialData }) => {
   const [inputErrors, setInputErrors] = useState({});
@@ -94,7 +94,7 @@ const ItemForm = ({ onSubmit, onReset, initialData }) => {
         checked={formData.isFavorite}
         checkedIcon="heart"
         uncheckedIcon="heart-o"
-        checkedColor="red"
+        checkedColor={Colors.accent}
         onPress={() => handleChange("isFavorite", !formData.isFavorite)}
       />
       <TouchableOpacity style={Styles.primaryButton} onPress={handleSubmit}>
