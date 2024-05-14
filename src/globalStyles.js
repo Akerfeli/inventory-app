@@ -31,6 +31,11 @@ const Styles = StyleSheet.create({
     color: Colors.textLight,
     fontSize: 14,
   },
+  textLabel: {
+    color: Colors.text,
+    fontWeight: "bold",
+    fontSize: 12,
+  },
   heading: {
     color: Colors.heading,
     fontWeight: "bold",
