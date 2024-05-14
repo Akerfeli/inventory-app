@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { View, Button } from "react-native";
-import { Input } from "react-native-elements";
+import { View, TouchableOpacity } from "react-native";
+import { Input, Text } from "react-native-elements";
 import PasswordStrengthMeterBar from "react-native-password-strength-meter-bar";
 
 import { useAuth } from "../contexts/AuthContext";
+import { Colors, Styles } from "../globalStyles";
 import { validateSignInSignUp } from "../utils/validation";
 
 const SignUpScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordActive, setPasswordActive] = useState(false);
   const { signUp } = useAuth();
   const [errors, setErrors] = useState({});
 
@@ -25,25 +27,43 @@ const SignUpScreen = () => {
     }
   };
   return (
-    <View>
+    <View style={Styles.container}>
+      <Text style={[Styles.heading, { textAlign: "center", padding: 15 }]}>
+        Create your account!
+      </Text>
       <Input
         placeholder="email@adress.com"
         leftIcon={{ name: "mail", type: "ionicon" }}
         autoCapitalize="none"
         onChangeText={(text) => setEmail(text)}
-        errorMessage={errors.email}
+        errorMessage={
+          <Text style={{ color: Colors.textError }}>{errors.email}</Text>
+        }
+        inputStyle={Styles.textPrimary}
       />
 
       <Input
         placeholder="Password"
         leftIcon={{ name: "lock-closed", type: "ionicon" }}
         onChangeText={(text) => setPassword(text)}
+        onFocus={() => setPasswordActive(true)}
         autoCapitalize="none"
         secureTextEntry={true}
-        errorMessage={errors.password}
+        errorMessage={
+          <Text style={{ color: Colors.textError }}>{errors.password}</Text>
+        }
+        inputStyle={Styles.textPrimary}
       />
-      <PasswordStrengthMeterBar password={password} />
-      <Button title="Create account" onPress={() => handleSignUp()} />
+      <PasswordStrengthMeterBar
+        password={password}
+        unfilledColor={Colors.bgSecondary}
+      />
+      <TouchableOpacity
+        style={[Styles.primaryButton, { marginTop: passwordActive ? 10 : 0 }]}
+        onPress={() => handleSignUp()}
+      >
+        <Text style={Styles.primaryButtonText}>Sign up</Text>
+      </TouchableOpacity>
     </View>
   );
 };
