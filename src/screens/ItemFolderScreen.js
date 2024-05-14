@@ -30,15 +30,10 @@ const ItemFolderScreen = () => {
 
   // Flatten the data
   const flatData = useMemo(() => {
-    const flatten = (data) => {
-      let flatArray = [];
-      data.items.forEach((obj) => flatArray.push({ ...obj, type: "object" }));
-      data.subfolders.forEach((subfolder) =>
-        flatArray.push({ ...subfolder, type: "folder" })
-      );
-      return flatArray;
-    };
-    return flatten(mockData);
+    const flatArray = mockData.subfolders
+      .map((subfolder) => ({ ...subfolder, type: "folder" }))
+      .concat(mockData.items.flatMap((obj) => ({ ...obj, type: "object" })));
+    return flatArray;
   }, [mockData]);
 
   return (
