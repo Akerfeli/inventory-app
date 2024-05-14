@@ -11,6 +11,8 @@ import {
 
 import { db } from "../../firebaseConfig";
 
+// ToDo: Research about having a callback (setData) and if there exist a cleanup function
+// SSo we can put it in the useEffect to do a cleanup when unmounted.
 const fetchData = async (q) => {
   try {
     const querySnapshot = await getDocs(q);
@@ -21,7 +23,7 @@ const fetchData = async (q) => {
         ...doc.data(),
       });
     });
-    // ToDo: comment
+    // ToDo: Comment out
     console.log("Fetched data: ", data);
     return data;
   } catch (error) {
@@ -66,16 +68,36 @@ export const getFavorites = async (uid) => {
 };
 
 export const getAllFolders = async (uid) => {
-  // Step 1: Retrieve all folders
-  const folderQuery = query(
-    collection(db, "folder-data"),
-    where("createdBy", "==", uid)
-  );
-  const folders = await fetchData(folderQuery);
+  const q = query(collection(db, "folder-data"), where("createdBy", "==", uid));
 
-  return folders;
+  return await fetchData(q);
 };
 
+export const getItemsByCategory = async (category) => {
+  const q = query(
+    collectionGroup(db, "items"),
+    where("category", "==", category)
+  );
+  return await fetchData(q);
+};
+
+export const getCategories = async () => {
+  const q = collectionGroup(db, "items");
+  const items = await fetchData(q);
+
+  const categories = new Set();
+
+  items.forEach((item) => {
+    if (item.category && item.category.trim() !== "") {
+      // Check if category exists and is not empty
+      categories.add(item.category);
+    }
+  });
+
+  console.log("-------------IN SERVICE---------------");
+  console.log(Array.from(categories)); // Convert Set to Array for return
+  return Array.from(categories);
+};
 /*----------------------- DELETES -----------------------*/
 
 export const deleteItem = async (collectionPath, documentId) => {
