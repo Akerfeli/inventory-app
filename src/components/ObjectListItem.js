@@ -1,9 +1,17 @@
+import { CheckBox } from "@rneui/themed";
 import React from "react";
 import { TouchableWithoutFeedback, View, Text, StyleSheet } from "react-native";
 
 import AmountButton from "./AmountButton";
+import { Colors } from "../globalStyles";
 
-const ObjectListItem = ({ item, itemId, onEditPressed, changeAmount }) => {
+const ObjectListItem = ({
+  item,
+  itemId,
+  onEditPressed,
+  changeAmount,
+  onFavoritePressed,
+}) => {
   const renderLeftContainer = () => {
     return (
       <View style={styles.leftContainer}>
@@ -29,6 +37,14 @@ const ObjectListItem = ({ item, itemId, onEditPressed, changeAmount }) => {
         <AmountButton
           amount={item.amount}
           changeAmount={(newAmount) => changeAmount(itemId, newAmount)}
+        />
+        <CheckBox
+          checked={item.isFavorite}
+          checkedIcon="heart"
+          uncheckedIcon="heart-o"
+          checkedColor={Colors.accent}
+          onPress={() => onFavoritePressed("isFavorite", !item.isFavorite)}
+          containerStyle={{ padding: 0, marginRight: 4, marginLeft: 16 }}
         />
       </View>
     );
