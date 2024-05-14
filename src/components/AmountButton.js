@@ -15,6 +15,10 @@ const AmountButton = ({ amount, changeAmount }) => {
     }
   };
 
+  const cleanInputText = (text) => {
+    return text.replace(/[^\d]/g, ""); // Remove all non-numeric characters
+  };
+
   return (
     <View style={[styles.amountContainer, styles.flexEnd]}>
       <TouchableOpacity
@@ -26,10 +30,9 @@ const AmountButton = ({ amount, changeAmount }) => {
       <TextInput
         value={amount.toString()}
         onChangeText={(text) => {
-          const value = parseInt(text);
-          if (!isNaN(value)) {
-            changeAmount(value >= 0 ? value : 0); // Don't allow negative values
-          }
+          const cleanedText = cleanInputText(text);
+          const value = cleanedText === "" ? "" : parseInt(cleanedText);
+          changeAmount(value);
         }}
         style={styles.input}
         keyboardType="numeric"
@@ -49,7 +52,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 16,
-    borderColor: "#bbb",
+    borderColor: "#ccc",
     borderWidth: 1,
     width: 40 + 24 + 24, //ToDo: maybe we can change it so that we don't need this?
   },
