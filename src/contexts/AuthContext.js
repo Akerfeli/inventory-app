@@ -6,6 +6,8 @@ import {
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 import { auth } from "../../firebaseConfig";
+import useFetch from "../hooks/useFetch";
+import { createRootFolder } from "../services/firebaseService";
 
 const AuthContext = createContext();
 
@@ -80,6 +82,7 @@ export const AuthProvider = ({ children }) => {
       };
       setUserState(newUserState);
       await storeUserState(newUserState); // Store user state
+      createRootFolder(user.uid);
     } catch (error) {
       throw error;
     }

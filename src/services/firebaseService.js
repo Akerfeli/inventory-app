@@ -8,7 +8,7 @@ import {
   doc,
   deleteDoc,
   getDoc,
-  Timestamp,
+  setDoc,
   serverTimestamp,
 } from "firebase/firestore";
 
@@ -107,9 +107,7 @@ export const createFolder = async (folderName, parentId, uid) => {
         name: folderName,
         createdBy: uid,
         parentId, // Assuming you pass the parent folder ID as an argument
-        subfolders: [], // Initialize subfolders array
-        items: [],
-        timestamp: serverTimestamp(),
+        timeCreated: serverTimestamp(),
       };
       transaction.set(folderRef, folderData);
 
@@ -118,7 +116,7 @@ export const createFolder = async (folderName, parentId, uid) => {
       const subfolderData = {
         name: folderName,
         folderId: folderRef.id, // Use the auto-generated ID of the newly created folder
-        timestamp: folderRef.timestamp,
+        timestamp: folderRef.timeCreated,
       };
       transaction.set(
         doc(parentFolderRef.collection("subfolders")),
@@ -129,5 +127,25 @@ export const createFolder = async (folderName, parentId, uid) => {
     return folderRef.id;
   } catch (error) {
     console.error("Transaction failed: ", error);
+  }
+};
+
+export const createRootFolder = async (uid) => {
+  try {
+    const folderCollectionRef = collection(db, "folder-data"); // Reference to the collection
+    const folderRef = doc(folderCollectionRef); // Reference to a new document in the collection
+    const folderData = {
+      name: "root",
+      createdBy: uid,
+      parentId: null,
+      timeCreated: serverTimestamp(),
+    };
+
+    await setDoc(folderRef, folderData);
+    console.log("Root folder created successfully for user:", uid);
+    return folderRef.id;
+  } catch (error) {
+    console.error("Error creating root folder:", error);
+    // Handle error appropriately, e.g., notify the user, retry, etc.
   }
 };
