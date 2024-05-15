@@ -8,15 +8,15 @@ import {
   StyleSheet,
 } from "react-native";
 
+import ObjectListItem from "../components/ObjectListItem";
 import { useAuth } from "../contexts/AuthContext";
 import useFetch from "../hooks/useFetch";
 import { getItemsToBuy } from "../services/firebaseService";
 import { Styles, Colors } from "../globalStyles";
-import ObjectListItem from "../components/ObjectListItem";
 
 const ShoppingScreen = () => {
   const { userState } = useAuth();
-  const { data, loading, error } = useFetch({
+  const { data, isLoading, error } = useFetch({
     firebaseFunction: () => getItemsToBuy(userState.id),
   });
 
@@ -136,8 +136,13 @@ const ShoppingScreen = () => {
     );
   };
 
-  if (loading) {
-    return null;
+  // Fallback, if loading
+  if (isLoading) {
+    return (
+      <View style={styles.centerContainer}>
+        <ActivityIndicator />
+      </View>
+    );
   }
 
   //Fallback if shopping list is empty
