@@ -6,7 +6,10 @@ import {
   collectionGroup,
   runTransaction,
   doc,
+  batch,
   deleteDoc,
+  updateDoc,
+  addDoc,
   getDoc,
   setDoc,
   serverTimestamp,
@@ -169,5 +172,101 @@ export const createRootFolder = async (uid) => {
   } catch (error) {
     console.error("Error creating root folder:", error);
     // Handle error appropriately, e.g., notify the user, retry, etc.
+  }
+};
+
+export const createItem = async (uid, fieldInfo) => {
+  try {
+    const { parentId, ...otherFields } = fieldInfo;
+
+    // Check if parentId is provided
+    if (!parentId) {
+      throw new Error("Parent ID is required.");
+    }
+
+    // Construct the item data
+    const itemData = {
+      createdBy: uid,
+      parentId,
+      timeCreated: serverTimestamp(),
+      ...otherFields,
+    };
+
+    // Reference to the parent folder's items collection
+    const itemsCollectionRef = collection(db, "folder-data", parentId, "items");
+
+    // Add the item document to the parent folder's items collection and get its ID
+    const newItemRef = await addDoc(itemsCollectionRef, itemData);
+    const newItemId = newItemRef.id;
+
+    console.log("Item created successfully!");
+
+    return newItemId;
+  } catch (error) {
+    console.error("Error creating item:", error);
+    throw error; // Rethrow the error for handling elsewhere if needed
+  }
+};
+
+/*----------------------- PUT -----------------------*/
+
+export const editItem = async (itemId, currentParentId, updatedFields) => {
+  try {
+    // Execute the transaction
+    await runTransaction(db, async (transaction) => {
+      // Reference to the item document in the current parent folder
+      const currentItemRef = doc(
+        db,
+        "folder-data",
+        currentParentId,
+        "items",
+        itemId
+      );
+
+      // Add the item to the items collection in the new parentId folder
+      if (updatedFields.parentId !== currentParentId) {
+        const newItemRef = doc(
+          db,
+          "folder-data",
+          updatedFields.parentId,
+          "items",
+          itemId
+        );
+        transaction.set(newItemRef, updatedFields);
+        transaction.delete(currentItemRef);
+      } else {
+        // Update the item document with the provided updated fields
+        transaction.update(currentItemRef, updatedFields);
+      }
+    });
+
+    console.log("Item updated successfully!");
+  } catch (error) {
+    console.error("Error editing item:", error);
+    throw error; // Rethrow the error for handling elsewhere if needed
+  }
+};
+
+export const updateShoppingListStatus = async (items) => {
+  try {
+    // Initialize a batched write
+    const batchedWrite = batch();
+
+    // Iterate over the items array
+    items.forEach(({ itemId, parentId }) => {
+      // Reference to the item document
+      const itemRef = doc(db, "folder-data", parentId, "items", itemId);
+
+      // Update the shoppingListStatus field to "notListed"
+      batchedWrite.update(itemRef, { shoppingListStatus: "notListed" });
+    });
+
+    // Commit the batched write
+    await batchedWrite.commit();
+
+    console.log("Shopping list status updated successfully!");
+  } catch (error) {
+    console.error("Error updating shopping list status:", error);
+    throw error; // Rethrow the error for handling elsewhere if needed
   }
 };
