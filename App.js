@@ -27,7 +27,7 @@ function HomeStack() {
       screenOptions={{
         headerTintColor: Colors.primary,
         headerTitleAlign: "center",
-        headerTitleStyle: { color: Colors.heading, fontSize: 16 },
+        headerTitleStyle: { color: Colors.primary, fontSize: 16 },
       }}
     >
       <Stack.Screen

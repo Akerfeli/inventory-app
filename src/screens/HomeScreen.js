@@ -58,7 +58,7 @@ const HomeScreen = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, padding: 8 }}>
       <SearchBar
         platform="android"
         placeholder="Search"
