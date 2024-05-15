@@ -95,16 +95,6 @@ export const getFolderContentByDocId = async (documentId) => {
   return await fetchData(q);
 };
 
-export const getItemsToBuy = async (uid) => {
-  const statuses = ["toBuy", "completed"];
-  const q = query(
-    collectionGroup(db, "items"),
-    where("createdBy", "==", uid),
-    where("shoppingListStatus", "in", statuses)
-  );
-  return await fetchData(q);
-};
-
 export const getFavorites = async (uid) => {
   const q = query(
     collectionGroup(db, "items"),

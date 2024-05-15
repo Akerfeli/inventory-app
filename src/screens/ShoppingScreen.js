@@ -10,21 +10,18 @@ import {
 } from "react-native";
 
 import ObjectListItem from "../components/ObjectListItem";
-import { useAuth } from "../contexts/AuthContext";
 import { Styles, Colors } from "../globalStyles";
-import useFetch from "../hooks/useFetch";
+import useShoppingDataList from "../hooks/useShoppingDataList";
 import {
   editItem,
-  getItemsToBuy,
   updateShoppingListStatus,
 } from "../services/firebaseService";
 
 const ShoppingScreen = () => {
-  const { userState } = useAuth();
-  const { data, isLoading, error } = useFetch({
+  /*  const { data, isLoading, error } = useFetch({
     firebaseFunction: () => getItemsToBuy(userState.id),
-  });
-
+  }); */
+  const { data, isLoading } = useShoppingDataList();
   /*
   const mockData = [
     {
