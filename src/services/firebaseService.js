@@ -6,7 +6,7 @@ import {
   collectionGroup,
   runTransaction,
   doc,
-  batch,
+  writeBatch,
   deleteDoc,
   updateDoc,
   addDoc,
@@ -303,12 +303,12 @@ export const editItem = async (itemId, currentParentId, updatedFields) => {
 export const updateShoppingListStatus = async (items) => {
   try {
     // Initialize a batched write
-    const batchedWrite = batch();
+    const batchedWrite = writeBatch(db);
 
     // Iterate over the items array
-    items.forEach(({ itemId, parentId }) => {
+    items.forEach((item) => {
       // Reference to the item document
-      const itemRef = doc(db, "folder-data", parentId, "items", itemId);
+      const itemRef = doc(db, "folder-data", item.parentID, "items", item.id);
 
       // Update the shoppingListStatus field to "notListed"
       batchedWrite.update(itemRef, { shoppingListStatus: "notListed" });

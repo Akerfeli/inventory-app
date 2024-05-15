@@ -13,7 +13,11 @@ import ObjectListItem from "../components/ObjectListItem";
 import { useAuth } from "../contexts/AuthContext";
 import { Styles, Colors } from "../globalStyles";
 import useFetch from "../hooks/useFetch";
-import { editItem, getItemsToBuy } from "../services/firebaseService";
+import {
+  editItem,
+  getItemsToBuy,
+  updateShoppingListStatus,
+} from "../services/firebaseService";
 
 const ShoppingScreen = () => {
   const { userState } = useAuth();
@@ -58,21 +62,23 @@ const ShoppingScreen = () => {
   ];*/
 
   const removeCompleted = () => {
-    //ToDo: removeCompleted
-    // maybe we can do a batch edit??
-    console.log(`Remove completed`);
+    const completedItems = [];
+    data.forEach((item) => {
+      if (item.shoppingListStatus === "completed") {
+        completedItems.push(item);
+      }
+    });
+    updateShoppingListStatus(completedItems);
   };
 
   const toggleItemCheck = (item) => {
-    console.log(`Toggle ${item.id}`);
     const newStatus =
       item.shoppingListStatus === "toBuy" ? "completed" : "toBuy";
     editItem(item.id, item.parentID, { shoppingListStatus: newStatus });
   };
 
-  const removeItemFromShoppingList = (itemId) => {
-    //ToDo: set item to notListed status in db
-    console.log(`Remove ${itemId}`);
+  const removeItemFromShoppingList = (item) => {
+    editItem(item.id, item.parentID, { shoppingListStatus: "notListed" });
   };
 
   const handleChangeAmount = (itemId, amount) => {
@@ -95,7 +101,7 @@ const ShoppingScreen = () => {
         rightContent={
           <Button
             title="Remove from list"
-            onPress={() => removeItemFromShoppingList(listItem.item.id)}
+            onPress={() => removeItemFromShoppingList(item)}
             icon={
               <Icon
                 name="playlist-remove"
