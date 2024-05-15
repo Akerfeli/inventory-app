@@ -49,7 +49,7 @@ const SignInScreen = () => {
       <Text style={[Styles.heading, { fontSize: 20 }]}>NestKeep</Text>
       <Input
         placeholder="email@adress.com"
-        leftIcon={{ name: "mail", type: "ionicon" }}
+        leftIcon={{ name: "mail", type: "ionicon", color: Colors.heading }}
         autoCapitalize="none"
         onChangeText={(text) => setEmail(text)}
         errorMessage={
@@ -60,7 +60,11 @@ const SignInScreen = () => {
 
       <Input
         placeholder="Password"
-        leftIcon={{ name: "lock-closed", type: "ionicon" }}
+        leftIcon={{
+          name: "lock-closed",
+          type: "ionicon",
+          color: Colors.heading,
+        }}
         onChangeText={(text) => setPassword(text)}
         autoCapitalize="none"
         secureTextEntry={true}
@@ -74,7 +78,7 @@ const SignInScreen = () => {
         <Text style={Styles.primaryButtonText}>Login</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => handleSignUp()}>
-        <Text style={Styles.textLink}>Sign Up</Text>
+        <Text style={[Styles.textLink, { marginVertical: 8 }]}>Sign Up</Text>
       </TouchableOpacity>
     </View>
   );
