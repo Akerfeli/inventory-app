@@ -35,9 +35,6 @@ const HomeScreen = () => {
     setSearchQuery(query); // ToDo
   };
 
-  console.log("Root folder render:" + folderData);
-  console.log("flatData");
-
   const renderEmptyPrompt = () => {
     return (
       <View style={styles.emptyPrompt}>
