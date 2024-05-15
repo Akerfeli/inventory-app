@@ -35,16 +35,55 @@ const fetchData = async (q) => {
 };
 
 /*----------------------- GETS -----------------------*/
-export const getRootFolderContent = async (uid) => {
+export const getRootContentAndFolderContent = async (uid) => {
+  const rootContent = await getRootContent(uid);
+
+  const folderContent = await getFolderContentByRootId(rootContent.id);
+
+  const result = {
+    ...rootContent,
+    items: folderContent.items,
+    subfolders: folderContent.subfolders,
+  };
+  return result;
+};
+
+export const getRootContent = async (uid) => {
   const q = query(
     collection(db, "folder-data"),
     where("createdBy", "==", uid),
     where("name", "==", "root")
   );
-  return await fetchData(q);
+
+  const rootRef = await fetchData(q);
+
+  if (rootRef.length === 0) {
+    throw new Error("Root folder not found");
+  }
+
+  return rootRef[0]; //Will always only exist one item in the array
 };
 
-export const getFolderContent = async (documentId) => {
+export const getFolderContentByRootId = async (rootFolderId) => {
+  const itemsQ = query(collection(db, `folder-data/${rootFolderId}/items`));
+  const subfoldersQ = query(
+    collection(db, `folder-data/${rootFolderId}/subfolders`)
+  );
+
+  const [itemsSnapshot, subfoldersSnapshot] = await Promise.all([
+    fetchData(itemsQ),
+    fetchData(subfoldersQ),
+  ]);
+
+  const folderContent = {
+    items: itemsSnapshot,
+    subfolders: subfoldersSnapshot,
+  };
+
+  return folderContent;
+};
+
+export const getFolderContentByDocId = async (documentId) => {
   const q = query(
     collection(db, "folder-data"),
     where("__name__", "==", documentId)
