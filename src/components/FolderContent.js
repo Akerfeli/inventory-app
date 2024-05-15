@@ -19,7 +19,6 @@ const FolderContent = ({
     navigation.push("Item Folder", {
       title: folder.name,
       folderId: folder.folderId,
-      key: folder.folderId,
       previousScreenTitle: folderName,
     });
   };

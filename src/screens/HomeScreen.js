@@ -19,7 +19,6 @@ import useFlattenFolderContent from "../hooks/useFlattenFolderContent";
 import { getRootContentAndFolderContent } from "../services/firebaseService";
 
 const HomeScreen = () => {
-  const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState();
   const { userState } = useAuth();
   const {
@@ -79,9 +78,7 @@ const HomeScreen = () => {
         onAddFolderPressed={() => console.log("add folder")}
       />
 
-      {folderData && (
-        <FolderContent folderData={flatContent} folderName="Home" />
-      )}
+      {folderData && <FolderContent folderData={flatContent} folderName="" />}
       {flatContent.length === 0 && renderEmptyPrompt()}
     </SafeAreaView>
   );
