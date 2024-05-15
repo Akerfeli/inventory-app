@@ -210,13 +210,35 @@ export const createItem = async (uid, fieldInfo) => {
 
 /*----------------------- PUT -----------------------*/
 
-export const editItem = async (itemId, parentId, updatedFields) => {
+export const editItem = async (itemId, currentParentId, updatedFields) => {
   try {
-    // Reference to the item document
-    const itemRef = doc(db, "folder-data", parentId, "items", itemId);
+    // Execute the transaction
+    await runTransaction(db, async (transaction) => {
+      // Reference to the item document in the current parent folder
+      const currentItemRef = doc(
+        db,
+        "folder-data",
+        currentParentId,
+        "items",
+        itemId
+      );
 
-    // Update the item document with the provided updated fields
-    await updateDoc(itemRef, updatedFields);
+      // Add the item to the items collection in the new parentId folder
+      if (updatedFields.parentId !== currentParentId) {
+        const newItemRef = doc(
+          db,
+          "folder-data",
+          updatedFields.parentId,
+          "items",
+          itemId
+        );
+        transaction.set(newItemRef, updatedFields);
+        transaction.delete(currentItemRef);
+      } else {
+        // Update the item document with the provided updated fields
+        transaction.update(currentItemRef, updatedFields);
+      }
+    });
 
     console.log("Item updated successfully!");
   } catch (error) {
