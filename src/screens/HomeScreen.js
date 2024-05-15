@@ -1,16 +1,10 @@
-import { useNavigation } from "@react-navigation/native";
 import { SearchBar, Icon } from "@rneui/themed";
-import React, { useState, useMemo } from "react";
-import {
-  Button,
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-} from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import FolderContent from "../components/FolderContent";
+import FolderCreationModal from "../components/FolderCreationModal";
 import FolderMenu from "../components/FolderMenu";
 import { useAuth } from "../contexts/AuthContext";
 import { Colors, Styles } from "../globalStyles";
@@ -19,6 +13,7 @@ import useFlattenFolderContent from "../hooks/useFlattenFolderContent";
 import { getRootContentAndFolderContent } from "../services/firebaseService";
 
 const HomeScreen = () => {
+  const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState();
   const { userState } = useAuth();
   const {
@@ -59,6 +54,12 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, padding: 8 }}>
+      <FolderCreationModal
+        modalVisible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        parentFolder={folderData.id}
+        onAdded={() => setModalVisible(false)}
+      />
       <SearchBar
         platform="android"
         placeholder="Search"
@@ -75,7 +76,7 @@ const HomeScreen = () => {
       />
       <FolderMenu
         folderName="Home"
-        onAddFolderPressed={() => console.log("add folder")}
+        onAddFolderPressed={() => setModalVisible(true)}
       />
 
       {folderData && <FolderContent folderData={flatContent} folderName="" />}

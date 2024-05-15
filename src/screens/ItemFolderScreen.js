@@ -1,9 +1,11 @@
 import { useRoute } from "@react-navigation/native";
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 
 import Breadcrumbs from "../components/Breadcrumbs";
 import FolderContent from "../components/FolderContent";
+import FolderCreationModal from "../components/FolderCreationModal";
+import FolderMenu from "../components/FolderMenu";
 import useFetch from "../hooks/useFetch";
 import useFlattenFolderContent from "../hooks/useFlattenFolderContent";
 import { getFolderContentById } from "../services/firebaseService";
@@ -11,6 +13,7 @@ import { getFolderContentById } from "../services/firebaseService";
 const ItemFolderScreen = () => {
   const route = useRoute();
   const { previousScreenTitle, title, folderId } = route.params;
+  const [modalVisible, setModalVisible] = useState(false);
 
   const {
     data: folderData,
@@ -31,6 +34,12 @@ const ItemFolderScreen = () => {
         backgroundColor: "white",
       }}
     >
+      <FolderCreationModal
+        modalVisible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        parentFolder={folderId}
+        onAdded={() => setModalVisible(false)}
+      />
       <Breadcrumbs
         currentScreenTitle={title}
         previousScreenTitle={previousScreenTitle}
@@ -40,7 +49,13 @@ const ItemFolderScreen = () => {
           <ActivityIndicator />
         </View>
       ) : (
-        <FolderContent folderData={flatContent} folderName={title} />
+        <>
+          <FolderMenu
+            folderName={title}
+            onAddFolderPressed={() => setModalVisible(true)}
+          />
+          <FolderContent folderData={flatContent} folderName={title} />
+        </>
       )}
     </View>
   );
