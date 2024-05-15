@@ -5,6 +5,7 @@ import { TouchableOpacity, View, Text } from "react-native";
 import AmountButton from "./AmountButton";
 import CustomTextInput from "./CustomTextInput";
 import { Styles, Colors } from "../globalStyles";
+import CategorySelection from "./CategorySelection";
 
 const ItemForm = ({ onSubmit, onReset, initialData }) => {
   const [inputErrors, setInputErrors] = useState({});
@@ -89,7 +90,10 @@ const ItemForm = ({ onSubmit, onReset, initialData }) => {
         error={inputErrors?.description}
         rows={5}
       />
-      {/*ToDo: Add category selection*/}
+      <CategorySelection
+        selectedCategory={formData.category}
+        onSelectCategory={(value) => handleChange("category", value)}
+      />
       <CheckBox
         checked={formData.isInShoppingList}
         title="In shopping list"
