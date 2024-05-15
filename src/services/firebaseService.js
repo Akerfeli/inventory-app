@@ -8,11 +8,12 @@ import {
   doc,
   batch,
   deleteDoc,
-  updateDoc,
+  deleteCollection,
   addDoc,
   getDoc,
   setDoc,
   serverTimestamp,
+  writeBatch,
 } from "firebase/firestore";
 
 import { db } from "../../firebaseConfig";
@@ -146,7 +147,7 @@ export const getCategories = async () => {
 };
 /*----------------------- DELETES -----------------------*/
 
-export const deleteItem = async (collectionPath, documentId) => {
+export const deleteDocumentById = async (collectionPath, documentId) => {
   // Check if the document exists
   const itemDoc = doc(db, collectionPath, documentId);
   const itemSnapshot = await getDoc(itemDoc);
@@ -158,6 +159,70 @@ export const deleteItem = async (collectionPath, documentId) => {
     console.log("Document does not exist with id: ", documentId);
   }
 };
+
+async function deleteDocumentByPath(collectionPath) {
+  try {
+    const querySnapshot = await getDocs(collection(db, collectionPath));
+    const batch = writeBatch(db);
+
+    querySnapshot.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    await batch.commit();
+    console.log("Documents in", collectionPath, "deleted successfully.");
+  } catch (error) {
+    console.error("Error deleting documents in", collectionPath, ":", error);
+  }
+}
+
+export async function deleteFolder(topFolderId) {
+  const folderIds = await getFolderIds(topFolderId);
+
+  for (const folderId of folderIds) {
+    await deleteDocumentByPath(`folder-data/${folderId}/items`);
+    await deleteDocumentByPath(`folder-data/${folderId}/subfolders`);
+    await deleteDocumentById("folder-data", folderId);
+
+    // Query subfolders where folderId matches the folderId of the current folder
+    const q = query(
+      collectionGroup(db, "subfolders"),
+      where("folderId", "==", folderId)
+    );
+    const subfoldersSnapshot = await getDocs(q);
+
+    // Delete each subfolder
+    const batch = writeBatch(db);
+    subfoldersSnapshot.forEach((subfolderDoc) => {
+      batch.delete(subfolderDoc.ref);
+    });
+    await batch.commit();
+  }
+}
+
+export async function getFolderIds(folderId, folderIds = new Set()) {
+  // Get a reference to the folder document
+  console.log("Current folder ID:", folderId);
+  const folderRef = doc(db, "folder-data", folderId);
+
+  // Add current folder ID to the set
+  folderIds.add(folderId);
+
+  // Get subfolders
+  const subfoldersQuery = query(collection(folderRef, "subfolders"));
+  const subfoldersSnapshot = await getDocs(subfoldersQuery);
+
+  // Recursively collect subfolder IDs
+  for (const subfolderDoc of subfoldersSnapshot.docs) {
+    const subfolderData = subfolderDoc.data();
+    const subfolderId = subfolderData.folderId;
+    if (subfolderId) {
+      await getFolderIds(subfolderId, folderIds);
+    }
+  }
+  console.log("FOLDER ID -------------------->", folderIds);
+  return folderIds;
+}
 
 /*----------------------- POSTS -----------------------*/
 
