@@ -6,7 +6,9 @@ import {
   collectionGroup,
   runTransaction,
   doc,
+  batch,
   deleteDoc,
+  updateDoc,
   addDoc,
   getDoc,
   setDoc,
@@ -202,6 +204,47 @@ export const createItem = async (uid, fieldInfo) => {
     return newItemId;
   } catch (error) {
     console.error("Error creating item:", error);
+    throw error; // Rethrow the error for handling elsewhere if needed
+  }
+};
+
+/*----------------------- PUT -----------------------*/
+
+export const editItem = async (itemId, parentId, updatedFields) => {
+  try {
+    // Reference to the item document
+    const itemRef = doc(db, "folder-data", parentId, "items", itemId);
+
+    // Update the item document with the provided updated fields
+    await updateDoc(itemRef, updatedFields);
+
+    console.log("Item updated successfully!");
+  } catch (error) {
+    console.error("Error editing item:", error);
+    throw error; // Rethrow the error for handling elsewhere if needed
+  }
+};
+
+export const updateShoppingListStatus = async (items) => {
+  try {
+    // Initialize a batched write
+    const batchedWrite = batch();
+
+    // Iterate over the items array
+    items.forEach(({ itemId, parentId }) => {
+      // Reference to the item document
+      const itemRef = doc(db, "folder-data", parentId, "items", itemId);
+
+      // Update the shoppingListStatus field to "notListed"
+      batchedWrite.update(itemRef, { shoppingListStatus: "notListed" });
+    });
+
+    // Commit the batched write
+    await batchedWrite.commit();
+
+    console.log("Shopping list status updated successfully!");
+  } catch (error) {
+    console.error("Error updating shopping list status:", error);
     throw error; // Rethrow the error for handling elsewhere if needed
   }
 };
