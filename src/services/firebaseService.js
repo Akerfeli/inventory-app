@@ -13,6 +13,7 @@ import {
   getDoc,
   setDoc,
   serverTimestamp,
+  onSnapshot,
 } from "firebase/firestore";
 
 import { db } from "../../firebaseConfig";
@@ -37,6 +38,24 @@ const fetchData = async (q) => {
   }
 };
 
+// Does it fetch data?
+const listenForChanges = async (query, data) => {
+  console.log("In listenForChanges");
+  console.log("Defining DATA!", typeof data);
+  return onSnapshot(query, (snapshot) => {
+    const data = [];
+    snapshot.forEach((doc) => {
+      data.push({
+        id: doc.id,
+        ...doc.data(),
+      });
+    });
+    // Update data in real-time
+    console.log(data);
+    data(data);
+  });
+};
+
 /*----------------------- GETS -----------------------*/
 export const getRootContentAndFolderContent = async (uid) => {
   const rootContent = await getRootContent(uid);
@@ -51,14 +70,15 @@ export const getRootContentAndFolderContent = async (uid) => {
   return result;
 };
 
-export const getRootContent = async (uid) => {
+export const getRootContent = async (uid, data) => {
+  console.log("Defining DATA!", typeof data);
   const q = query(
     collection(db, "folder-data"),
     where("createdBy", "==", uid),
     where("name", "==", "root")
   );
 
-  const rootRef = await fetchData(q);
+  const rootRef = await listenForChanges(q, data);
 
   if (rootRef.length === 0) {
     throw new Error("Root folder not found");

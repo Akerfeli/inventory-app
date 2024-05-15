@@ -17,6 +17,8 @@ import ShoppingScreen from "./src/screens/ShoppingScreen";
 import SignInScreen from "./src/screens/SignInScreen";
 import SignUpScreen from "./src/screens/SignUpScreen";
 import "react-native-reanimated";
+import { getRootContent } from "./src/services/firebaseService";
+import useFetch from "./src/hooks/useFetch";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -63,6 +65,19 @@ export default function App() {
 
 function AppContent() {
   const { userState } = useAuth();
+
+  /*   const { data, loading, error } = useFetch({
+    firebaseFunction: () => getRootContent(userState.id),
+  });
+
+  if (data !== null) {
+    console.log(data);
+  }
+ */
+  const { data, loading, error } = useFetch(getRootContent(userState.id));
+  if (data !== null) {
+    console.log(data);
+  }
 
   return (
     <>
