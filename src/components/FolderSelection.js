@@ -1,33 +1,94 @@
 import { Icon } from "@rneui/themed";
-import React from "react";
-import { TouchableOpacity, View, Text } from "react-native";
+import React, { useState, useMemo } from "react";
+import {
+  View,
+  FlatList,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+
+import { Colors } from "../globalStyles";
+
+const mockFolders = [
+  { id: "1", name: "Root", parentId: null },
+  { id: "2", name: "Subfolder 1", parentId: 1 },
+  { id: "3", name: "Subfolder 2", parentId: "1" },
+  { id: "4", name: "Subfolder 3", parentId: "1" },
+  { id: "5", name: "Subsubfolder 1", parentId: "3" },
+];
 
 const FolderSelection = ({
-  selectedFolder,
-  setSelectedFolder,
-  folderStructure,
+  selectedFolderId,
+  setSelectedFolderId,
+  folders = mockFolders,
+  isOpen,
+  addFolderPressed,
 }) => {
-  return (
-    <TouchableOpacity onPress={() => onPress(folderId)}>
-      <View
-        style={{
-          height: 56,
-          padding: 8,
-          flexDirection: "row",
-          alignItems: "center",
-          gap: 16,
-        }}
+  const currentFolder = useMemo(() => {
+    return folders.find((folder) => folder.id === selectedFolderId) || {};
+  }, [folders, selectedFolderId]);
+
+  const currentSubfolders = useMemo(() => {
+    return folders.filter((folder) => folder.parentId === selectedFolderId);
+  }, [folders, selectedFolderId]);
+
+  const onFolderSelected = (folderId) => {
+    setSelectedFolderId(folderId);
+  };
+
+  const renderBackRow = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => onFolderSelected(currentFolder.parentId)}
       >
-        <Icon
-          name="folder-outline"
-          type="material-community"
-          color="grey"
-          size={32}
+        <View style={{ flexDirection: "row" }}>
+          <Text>Back</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderAddFolderRow = () => {
+    return (
+      <TouchableOpacity onPress={addFolderPressed}>
+        <View>
+          <Text>+ Add Folder</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderOpen = () => {
+    return (
+      <>
+        {currentFolder.parentId
+          ? renderBackRow() /*Show go back option when non-root folder*/
+          : null}
+        <View>
+          <Text>{currentFolder.name}</Text>
+        </View>
+        {renderAddFolderRow()}
+        <FlatList
+          data={currentSubfolders}
+          renderItem={({ item, index }) => (
+            <TouchableOpacity onPress={() => onFolderSelected(item.id)}>
+              <View>
+                <Text>{item.name}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item) => item.id}
         />
-        <Text style={{ fontWeight: "bold" }}>{folderName}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+      </>
+    );
+  };
+
+  const renderClosed = () => {
+    return <Text>{currentFolder.name}</Text>;
+  };
+
+  return <View>{isOpen ? renderOpen() : renderClosed()}</View>;
 };
 
 export default FolderSelection;
