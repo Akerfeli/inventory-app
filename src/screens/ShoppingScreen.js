@@ -8,11 +8,19 @@ import {
   StyleSheet,
 } from "react-native";
 
+import { useAuth } from "../contexts/AuthContext";
+import useFetch from "../hooks/useFetch";
+import { getItemsToBuy } from "../services/firebaseService";
 import { Styles, Colors } from "../globalStyles";
 import ObjectListItem from "../components/ObjectListItem";
 
 const ShoppingScreen = () => {
-  // ToDo: add useFetch for shopping list
+  const { userState } = useAuth();
+  const { data, loading, error } = useFetch({
+    firebaseFunction: () => getItemsToBuy(userState.id),
+  });
+
+  /*
   const mockData = [
     {
       id: "1",
@@ -46,7 +54,7 @@ const ShoppingScreen = () => {
       category: "Dairy",
       ShoppingListStatus: "completed",
     },
-  ];
+  ];*/
 
   const removeCompleted = () => {
     //ToDo: removeCompleted
@@ -128,8 +136,12 @@ const ShoppingScreen = () => {
     );
   };
 
+  if (loading) {
+    return null;
+  }
+
   //Fallback if shopping list is empty
-  if (!mockData || mockData.length === 0) {
+  if (!data || data.length === 0) {
     // ToDo: maybe we need && !isLoading?
     return (
       <View style={styles.emptyList}>
@@ -162,7 +174,7 @@ const ShoppingScreen = () => {
         <Text style={Styles.primaryButtonText}>Remove checked items</Text>
       </TouchableOpacity>
       <FlatList
-        data={mockData}
+        data={data}
         renderItem={renderSwipeableItem}
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
