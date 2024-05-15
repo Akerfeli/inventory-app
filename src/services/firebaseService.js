@@ -274,7 +274,10 @@ export const editItem = async (itemId, currentParentId, updatedFields) => {
       );
 
       // Add the item to the items collection in the new parentId folder
-      if (updatedFields.parentId !== currentParentId) {
+      if (
+        updatedFields.parentId &&
+        updatedFields.parentId !== currentParentId
+      ) {
         const newItemRef = doc(
           db,
           "folder-data",

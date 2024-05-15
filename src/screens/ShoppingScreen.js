@@ -13,7 +13,7 @@ import ObjectListItem from "../components/ObjectListItem";
 import { useAuth } from "../contexts/AuthContext";
 import { Styles, Colors } from "../globalStyles";
 import useFetch from "../hooks/useFetch";
-import { getItemsToBuy } from "../services/firebaseService";
+import { editItem, getItemsToBuy } from "../services/firebaseService";
 
 const ShoppingScreen = () => {
   const { userState } = useAuth();
@@ -63,10 +63,11 @@ const ShoppingScreen = () => {
     console.log(`Remove completed`);
   };
 
-  const toggleItemCheck = (itemId, status) => {
-    console.log(`Toggle ${itemId}`);
-    const newStatus = status === "toBuy" ? "completed" : "toBuy";
-    //ToDo: call db to edit item
+  const toggleItemCheck = (item) => {
+    console.log(`Toggle ${item.id}`);
+    const newStatus =
+      item.shoppingListStatus === "toBuy" ? "completed" : "toBuy";
+    editItem(item.id, item.parentID, { shoppingListStatus: newStatus });
   };
 
   const removeItemFromShoppingList = (itemId) => {
@@ -114,8 +115,8 @@ const ShoppingScreen = () => {
         <View style={styles.listRow}>
           <View style={styles.checkboxContainer}>
             <CheckBox
-              checked={item.ShoppingListStatus === "toBuy"}
-              onPress={() => toggleItemCheck(item.id, item.ShoppingListStatus)}
+              checked={item.shoppingListStatus === "completed"}
+              onPress={() => toggleItemCheck(item)}
               size={32}
               checkedColor={Colors.primary}
               containerStyle={{
