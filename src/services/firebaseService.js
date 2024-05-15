@@ -41,7 +41,7 @@ const fetchData = async (q) => {
 export const getRootContentAndFolderContent = async (uid) => {
   const rootContent = await getRootContent(uid);
 
-  const folderContent = await getFolderContentByRootId(rootContent.id);
+  const folderContent = await getFolderContentById(rootContent.id);
 
   const result = {
     ...rootContent,
@@ -67,10 +67,11 @@ export const getRootContent = async (uid) => {
   return rootRef[0]; //Will always only exist one item in the array
 };
 
-export const getFolderContentByRootId = async (rootFolderId) => {
-  const itemsQ = query(collection(db, `folder-data/${rootFolderId}/items`));
+export const getFolderContentById = async (folderId) => {
+  console.log("Fetching folder " + folderId);
+  const itemsQ = query(collection(db, `folder-data/${folderId}/items`));
   const subfoldersQ = query(
-    collection(db, `folder-data/${rootFolderId}/subfolders`)
+    collection(db, `folder-data/${folderId}/subfolders`)
   );
 
   const [itemsSnapshot, subfoldersSnapshot] = await Promise.all([

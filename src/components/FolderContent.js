@@ -18,8 +18,8 @@ const FolderContent = ({
   const handleNextFolder = (folder) => {
     navigation.push("Item Folder", {
       title: folder.name,
-      folderId: folder.id,
-      key: folder.id,
+      folderId: folder.folderId,
+      key: folder.folderId,
       previousScreenTitle: folderName,
     });
   };
@@ -61,7 +61,7 @@ const FolderContent = ({
       >
         {item.type === "folder" ? (
           <FolderListItem
-            folderId={item.id}
+            folderId={item.folderId}
             folderName={item.name}
             onPress={handlePress}
           />

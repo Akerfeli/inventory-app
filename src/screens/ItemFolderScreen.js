@@ -1,15 +1,29 @@
 import { useRoute } from "@react-navigation/native";
 import React, { useState, useMemo } from "react";
-import { View } from "react-native";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
 
 import Breadcrumbs from "../components/Breadcrumbs";
 import FolderContent from "../components/FolderContent";
+import { useAuth } from "../contexts/AuthContext";
+import useFetch from "../hooks/useFetch";
+import useFlattenFolderContent from "../hooks/useFlattenFolderContent";
+import { getFolderContentById } from "../services/firebaseService";
 
 const ItemFolderScreen = () => {
   const route = useRoute();
   const { previousScreenTitle, title, folderId } = route.params;
 
-  const [mockData, setMockData] = useState({
+  const { userState } = useAuth();
+  const {
+    data: folderData,
+    isLoading,
+    error,
+  } = useFetch({
+    firebaseFunction: () => getFolderContentById(folderId),
+  });
+  const flatContent = useFlattenFolderContent(folderData);
+
+  /*const [mockData, setMockData] = useState({
     id: 0,
     name: "Folder 1",
     items: [
@@ -26,15 +40,17 @@ const ItemFolderScreen = () => {
       { id: "subfolder1", name: "Subfolder 2" },
       { id: "subfolder2", name: "Subfolder 1" },
     ],
-  });
+  });*/
 
-  // Flatten the data
+  /*// Flatten the data
   const flatData = useMemo(() => {
     const flatArray = mockData.subfolders
       .map((subfolder) => ({ ...subfolder, type: "folder" }))
       .concat(mockData.items.flatMap((obj) => ({ ...obj, type: "object" })));
     return flatArray;
-  }, [mockData]);
+  }, [mockData]);*/
+
+  console.log(folderData);
 
   return (
     <View
@@ -50,9 +66,23 @@ const ItemFolderScreen = () => {
         currentScreenTitle={title}
         previousScreenTitle={previousScreenTitle}
       />
-      <FolderContent folderData={flatData} folderName={mockData.name} />
+      {isLoading ? (
+        <View style={styles.centerContainer}>
+          <ActivityIndicator />
+        </View>
+      ) : (
+        <FolderContent folderData={flatContent} folderName={folderData?.name} />
+      )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default ItemFolderScreen;
