@@ -2,7 +2,6 @@ import { useMemo } from "react";
 
 const useFlattenFolderContent = (folderData) => {
   const flatData = useMemo(() => {
-    console.log("inside flat folder content memo");
     const subfolders = folderData?.subfolders || [];
     const items = folderData?.items || [];
 
