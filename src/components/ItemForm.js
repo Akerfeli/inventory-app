@@ -73,7 +73,7 @@ const ItemForm = ({ onSubmit, onReset, initialData }) => {
         onChangeText={(value) => handleChange("name", value)}
         error={inputErrors?.name}
       />
-      <View>
+      <View style={{ marginBottom: 16 }}>
         <Text style={Styles.textLabel}>Amount</Text>
         <AmountButton
           amount={formData.amount}
@@ -93,9 +93,15 @@ const ItemForm = ({ onSubmit, onReset, initialData }) => {
       <CheckBox
         checked={formData.isInShoppingList}
         title="In shopping list"
+        checkedColor={Colors.primary}
         onPress={() =>
           handleChange("isInShoppingList", !formData.isInShoppingList)
         }
+        containerStyle={{
+          backgroundColor: "transparent",
+          marginLeft: 0,
+          padding: 0,
+        }}
       />
       <CheckBox
         title="Favorite"
@@ -103,9 +109,17 @@ const ItemForm = ({ onSubmit, onReset, initialData }) => {
         checkedIcon="heart"
         uncheckedIcon="heart-o"
         checkedColor={Colors.accent}
+        containerStyle={{
+          backgroundColor: "transparent",
+          marginLeft: 0,
+          padding: 0,
+        }}
         onPress={() => handleChange("isFavorite", !formData.isFavorite)}
       />
-      <TouchableOpacity style={Styles.primaryButton} onPress={handleSubmit}>
+      <TouchableOpacity
+        style={[Styles.primaryButton, { marginTop: 16 }]}
+        onPress={handleSubmit}
+      >
         <Text style={Styles.primaryButtonText}>Add item</Text>
       </TouchableOpacity>
     </View>
