@@ -19,6 +19,7 @@ import SignUpScreen from "./src/screens/SignUpScreen";
 import "react-native-reanimated";
 import { getRootContent } from "./src/services/firebaseService";
 import useFetch from "./src/hooks/useFetch";
+import useTest from "./src/hooks/useTest";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -74,11 +75,16 @@ function AppContent() {
     console.log(data);
   }
  */
-  const { data, loading, error } = useFetch(getRootContent(userState.id));
+  /*   const { data, loading, error } = useFetch(getRootContent(userState.id));
   if (data !== null) {
     console.log(data);
   }
+ */
 
+  const { data } = useTest();
+  if (data !== null) {
+    console.log(data);
+  }
   return (
     <>
       {!userState.isSignedIn ? (
