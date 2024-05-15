@@ -6,13 +6,14 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 
 import ObjectListItem from "../components/ObjectListItem";
 import { useAuth } from "../contexts/AuthContext";
+import { Styles, Colors } from "../globalStyles";
 import useFetch from "../hooks/useFetch";
 import { getItemsToBuy } from "../services/firebaseService";
-import { Styles, Colors } from "../globalStyles";
 
 const ShoppingScreen = () => {
   const { userState } = useAuth();
@@ -203,6 +204,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 0,
+  },
+  centerContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
   },
   emptyList: {
     flex: 1,
