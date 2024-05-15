@@ -5,6 +5,7 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  StyleSheet,
 } from "react-native";
 
 import { useAuth } from "../contexts/AuthContext";
@@ -58,27 +59,64 @@ const CategorySelection = ({ onSelectCategory, selectedCategory }) => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput
         placeholder="Type or select category"
         value={inputText}
         onChangeText={handleInputChange}
         onFocus={handleInputFocus} // Call handleInputFocus when input is focused
         onBlur={handleInputBlur} // Call handleInputBlur when input loses focus
+        style={[
+          styles.textInputContainer,
+          isDropdownVisible ? styles.textInputContainerOpen : null,
+        ]}
       />
       {isDropdownVisible && ( // Render dropdown only if isDropdownVisible is true
-        <FlatList
-          data={filteredCategories}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleCategorySelect(item)}>
-              <Text>{item}</Text>
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item}
-        />
+        <View style={styles.listContainer}>
+          <FlatList
+            data={filteredCategories}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => handleCategorySelect(item)}
+                style={styles.listItem}
+              >
+                <Text>{item}</Text>
+              </TouchableOpacity>
+            )}
+            keyExtractor={(item) => item}
+          />
+        </View>
       )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  textInputContainer: {
+    backgroundColor: "white",
+    padding: 8,
+  },
+  textInputContainerOpen: {
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+  },
+  container: {
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    width: "80%",
+    overflow: "hidden",
+  },
+  listContainer: {
+    borderTopWidth: 1,
+    borderColor: "#ccc",
+    backgroundColor: "white",
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+  },
+  listItem: {
+    padding: 8,
+  },
+});
 
 export default CategorySelection;
