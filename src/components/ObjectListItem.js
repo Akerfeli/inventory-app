@@ -4,14 +4,9 @@ import { TouchableWithoutFeedback, View, Text, StyleSheet } from "react-native";
 
 import AmountButton from "./AmountButton";
 import { Colors } from "../globalStyles";
+import { editItem } from "../services/firebaseService";
 
-const ObjectListItem = ({
-  item,
-  itemId,
-  onEditPressed,
-  changeAmount,
-  onFavoritePressed,
-}) => {
+const ObjectListItem = ({ item, onEditPressed, changeAmount }) => {
   const renderLeftContainer = () => {
     return (
       <View style={styles.leftContainer}>
@@ -31,19 +26,32 @@ const ObjectListItem = ({
     );
   };
 
+  const handleFavoritePressed = async () => {
+    try {
+      await editItem(item.id, item.parentID, {
+        favoriteList: !item.favoriteList,
+      });
+    } catch (error) {
+      console.log(
+        "An error occurred when changing value for favoriteList in item:",
+        error
+      );
+    }
+  };
+
   const renderRightContainer = () => {
     return (
       <View style={[styles.rightContainer]}>
         <AmountButton
           amount={item.amount}
-          changeAmount={(newAmount) => changeAmount(itemId, newAmount)}
+          changeAmount={(newAmount) => changeAmount(item.id, newAmount)}
         />
         <CheckBox
-          checked={item.isFavorite}
+          checked={item.favoriteList}
           checkedIcon="heart"
           uncheckedIcon="heart-o"
           checkedColor={Colors.accent}
-          onPress={() => onFavoritePressed("isFavorite", !item.isFavorite)}
+          onPress={handleFavoritePressed}
           containerStyle={{ padding: 0, marginRight: 4, marginLeft: 16 }}
         />
       </View>
@@ -51,7 +59,7 @@ const ObjectListItem = ({
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => onEditPressed(itemId)}>
+    <TouchableWithoutFeedback onPress={() => onEditPressed(item.id)}>
       <View style={styles.container}>
         {renderLeftContainer()}
         {renderRightContainer()}
