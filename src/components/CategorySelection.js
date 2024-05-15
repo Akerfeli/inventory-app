@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import { useAuth } from "../contexts/AuthContext";
 import { getCategories } from "../services/firebaseService";
 
 const CategorySelection = ({ onSelectCategory, selectedCategory }) => {
@@ -15,9 +16,11 @@ const CategorySelection = ({ onSelectCategory, selectedCategory }) => {
   const [filteredCategories, setFilteredCategories] = useState([]);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false); // State to manage dropdown visibility
 
+  const { userState } = useAuth();
+
   useEffect(() => {
     const fetchCategories = async () => {
-      const fetchedCategories = await getCategories();
+      const fetchedCategories = await getCategories(userState.id);
       setCategories(fetchedCategories);
       setFilteredCategories(fetchedCategories);
     };
