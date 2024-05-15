@@ -130,17 +130,16 @@ export const getItemsByCategory = async (uid, category) => {
 };
 
 export const getCategories = async (uid) => {
-  const q = collectionGroup(db, "items");
-  const items = await fetchData(q);
+  const q = query(collectionGroup(db, "items"), where("createdBy", "==", uid));
+
+  // Fetch items based on the query
+  const querySnapshot = await getDocs(q);
 
   const categories = new Set();
 
-  items.forEach((item) => {
-    if (
-      item.createdBy === uid &&
-      item.category &&
-      item.category.trim() !== ""
-    ) {
+  querySnapshot.forEach((doc) => {
+    const item = doc.data();
+    if (item.category && item.category.trim() !== "") {
       // Check if category exists and is not empty
       categories.add(item.category);
     }
