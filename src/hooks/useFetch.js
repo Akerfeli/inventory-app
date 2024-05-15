@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 
 const useFetch = ({ firebaseFunction }) => {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const firebasefunctionRef = useRef(firebaseFunction);
@@ -10,21 +10,21 @@ const useFetch = ({ firebaseFunction }) => {
     console.log("In useEffect! ");
     const fetchData = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
         const fetchedData = await firebasefunctionRef.current();
         setData(fetchedData);
         setError(null);
       } catch (error) {
         setError(error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, [firebasefunctionRef.current]);
 
-  return { data, loading, error };
+  return { data, isLoading, error };
 };
 
 export default useFetch;

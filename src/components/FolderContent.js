@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { ListItem, Button } from "@rneui/themed";
 import React from "react";
-import { View, FlatList, StyleSheet } from "react-native";
+import { View, FlatList, StyleSheet, Text } from "react-native";
 
 import FolderListItem from "./FolderListItem";
 import ObjectListItem from "./ObjectListItem";
@@ -11,6 +11,7 @@ const FolderContent = ({
   folderName,
   onDeleteFolder,
   onDeleteItem,
+  onEmptyMessage = "No items found",
 }) => {
   const navigation = useNavigation();
 
@@ -75,6 +76,15 @@ const FolderContent = ({
     );
   };
 
+  // Fallback if empty
+  if (!folderData || folderData.length === 0) {
+    return (
+      <View style={styles.emptyView}>
+        <Text style={styles.emptyText}>{onEmptyMessage}</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={{ flex: 1, width: "100%" }}>
       <FlatList
@@ -91,6 +101,14 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: "#ddd",
+  },
+  emptyView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    color: "#aaa",
   },
 });
 
