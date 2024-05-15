@@ -128,6 +128,16 @@ const ShoppingScreen = () => {
     );
   };
 
+  //Fallback if shopping list is empty
+  if (!mockData || mockData.length === 0) {
+    // ToDo: maybe we need && !isLoading?
+    return (
+      <View style={styles.emptyList}>
+        <Text style={styles.emptyListText}>The shopping list is empty.</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={{ flex: 1, width: "100%", alignItems: "center" }}>
       <TouchableOpacity
@@ -175,8 +185,16 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "red",
     padding: 0,
+  },
+  emptyList: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+  },
+  emptyListText: {
+    color: "#aaa",
   },
 });
 
