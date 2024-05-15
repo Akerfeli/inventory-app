@@ -6,7 +6,7 @@ import {
   collectionGroup,
   runTransaction,
   doc,
-  batch,
+  writeBatch,
   deleteDoc,
   updateDoc,
   addDoc,
@@ -120,22 +120,27 @@ export const getAllFolders = async (uid) => {
   return await fetchData(q);
 };
 
-export const getItemsByCategory = async (category) => {
+export const getItemsByCategory = async (uid, category) => {
   const q = query(
     collectionGroup(db, "items"),
-    where("category", "==", category)
+    where("category", "==", category),
+    where("createdBy", "==", uid)
   );
   return await fetchData(q);
 };
 
-export const getCategories = async () => {
+export const getCategories = async (uid) => {
   const q = collectionGroup(db, "items");
   const items = await fetchData(q);
 
   const categories = new Set();
 
   items.forEach((item) => {
-    if (item.category && item.category.trim() !== "") {
+    if (
+      item.createdBy === uid &&
+      item.category &&
+      item.category.trim() !== ""
+    ) {
       // Check if category exists and is not empty
       categories.add(item.category);
     }
@@ -275,7 +280,10 @@ export const editItem = async (itemId, currentParentId, updatedFields) => {
       );
 
       // Add the item to the items collection in the new parentId folder
-      if (updatedFields.parentId !== currentParentId) {
+      if (
+        updatedFields.parentId &&
+        updatedFields.parentId !== currentParentId
+      ) {
         const newItemRef = doc(
           db,
           "folder-data",
@@ -301,12 +309,12 @@ export const editItem = async (itemId, currentParentId, updatedFields) => {
 export const updateShoppingListStatus = async (items) => {
   try {
     // Initialize a batched write
-    const batchedWrite = batch();
+    const batchedWrite = writeBatch(db);
 
     // Iterate over the items array
-    items.forEach(({ itemId, parentId }) => {
+    items.forEach((item) => {
       // Reference to the item document
-      const itemRef = doc(db, "folder-data", parentId, "items", itemId);
+      const itemRef = doc(db, "folder-data", item.parentID, "items", item.id);
 
       // Update the shoppingListStatus field to "notListed"
       batchedWrite.update(itemRef, { shoppingListStatus: "notListed" });
