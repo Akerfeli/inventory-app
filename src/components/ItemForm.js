@@ -30,6 +30,13 @@ const ItemForm = ({ onSubmit, onReset, initialData }) => {
     if (!formData.name.trim()) {
       errors.name = "Name is required";
     }
+
+    if (formData.amount.trim() === "") {
+      errors.amount = "Amount is required";
+    } else if (isNaN(parseInt(formData.amount))) {
+      errors.amount = "Amount must be a number"; //ToDo: Should we allow floats?
+    }
+
     setInputErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -72,6 +79,7 @@ const ItemForm = ({ onSubmit, onReset, initialData }) => {
           amount={formData.amount}
           changeAmount={(value) => handleChange("amount", value)}
         />
+        {/*ToDo: add error message for amount*/}
       </View>
       <CustomTextInput
         label="Description"
