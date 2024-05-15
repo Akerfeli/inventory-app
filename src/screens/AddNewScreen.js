@@ -5,10 +5,13 @@ import { Button, View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import FolderCreationModal from "../components/FolderCreationModal";
 import ItemForm from "../components/ItemForm";
 
+//TODO: Change selectedFolderId!
 const AddNewScreen = () => {
   const navigation = useNavigation();
   const [navigatedFolderId, setNavigatedFolderId] = useState(null);
-  const [selectedFolderId, setSelectedFolderId] = useState(null);
+  const [selectedFolderId, setSelectedFolderId] = useState(
+    "M2UsMeNZ6X1O8qWJoT80"
+  );
   const [folderStructure, setFolderStructure] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [initialFormData, setInitialFormData] = useState({}); //ToDo: add something here?
@@ -45,6 +48,8 @@ const AddNewScreen = () => {
         <FolderCreationModal
           modalVisible={modalVisible}
           onClose={() => setModalVisible(false)}
+          parentFolder={selectedFolderId}
+          onAdded={() => setModalVisible(false)}
         />
         <ItemForm />
         <Button
