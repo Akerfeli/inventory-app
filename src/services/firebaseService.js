@@ -124,34 +124,45 @@ export const deleteItem = async (collectionPath, documentId) => {
 
 export const createFolder = async (folderName, parentId, uid) => {
   try {
-    let folderRef = "";
+    let folderRef;
     await runTransaction(db, async (transaction) => {
-      // Step 1: Create the folder document at the first level
-      folderRef = doc(db, "folder-data"); // Use a collection reference to generate an auto ID
+      // Step 1: Create a reference to the folder document
+      const folderCollectionRef = collection(db, "folder-data");
+      folderRef = doc(folderCollectionRef);
+
+      // Step 2: Set the folder data
       const folderData = {
         name: folderName,
         createdBy: uid,
-        parentId, // Assuming you pass the parent folder ID as an argument
+        parentId,
         timeCreated: serverTimestamp(),
       };
       transaction.set(folderRef, folderData);
 
-      // Step 2: Create a reference to the folder in the parent folder's document
-      const parentFolderRef = doc(db, "folder-data", parentId);
-      const subfolderData = {
-        name: folderName,
-        folderId: folderRef.id, // Use the auto-generated ID of the newly created folder
-        timestamp: folderRef.timeCreated,
-      };
-      transaction.set(
-        doc(parentFolderRef.collection("subfolders")),
-        subfolderData
-      );
+      // Step 3: Create a reference to the folder in the parent folder's document
+      if (parentId) {
+        const parentFolderRef = doc(db, "folder-data", parentId);
+        if (parentFolderRef) {
+          const subfolderCollectionRef = collection(
+            parentFolderRef,
+            "subfolders"
+          );
+          const subfolderData = {
+            name: folderName,
+            folderId: folderRef.id,
+            timestamp: folderData.timeCreated,
+          };
+          transaction.set(doc(subfolderCollectionRef), subfolderData);
+        } else {
+          throw new Error("Parent folder does not exist");
+        }
+      }
     });
     console.log("Transaction successfully committed!");
     return folderRef.id;
   } catch (error) {
     console.error("Transaction failed: ", error);
+    throw error; // Rethrow the error for handling elsewhere if needed
   }
 };
 

@@ -9,7 +9,9 @@ import {
   StyleSheet,
 } from "react-native";
 
+import { useAuth } from "../contexts/AuthContext";
 import { Styles, Colors } from "../globalStyles";
+import { createFolder } from "../services/firebaseService";
 
 const FolderCreationModal = ({
   parentFolder,
@@ -21,6 +23,7 @@ const FolderCreationModal = ({
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
+  const { userState } = useAuth();
 
   useEffect(() => {
     if (modalVisible) {
@@ -32,7 +35,7 @@ const FolderCreationModal = ({
     }
   }, [modalVisible]);
 
-  const handleAddFolder = () => {
+  const handleAddFolder = async () => {
     // Reset any previous error
     setInputError("");
     if (!name.trim()) {
@@ -40,22 +43,25 @@ const FolderCreationModal = ({
       return;
     }
 
-    // ToDo: add folder to db here
     // Set loading state
     setIsLoading(true);
 
-    // Simulate async folder creation in db
-    setTimeout(() => {
-      // If all ok
-      // onAdded(newFolderId);
-      // maybe onAdded has function for close modal? if not, do onClose()
+    try {
+      // Call the createFolder function to add the folder to the database
+      const newFolderId = await createFolder(name, parentFolder, userState.id);
 
-      // If error response
+      // If folder creation is successful, call onAdded with the new folder ID
+      onAdded(newFolderId);
+      // Close the modal
+      onClose();
+    } catch (error) {
+      console.log(error);
+      // If there's an error, set the error state
       setError("Failed to create folder. Please try again later.");
-
-      // Finally, reset loading state
+    } finally {
+      // Reset loading state
       setIsLoading(false);
-    }, 2000); // Simulating 2 seconds for folder creation
+    }
   };
 
   const renderButtonRow = () => {
@@ -76,7 +82,7 @@ const FolderCreationModal = ({
   return (
     <Modal
       animationType="slide"
-      transparent={true}
+      transparent
       visible={modalVisible}
       onRequestClose={onClose}
     >
