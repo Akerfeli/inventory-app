@@ -181,7 +181,7 @@ const FolderSelection = ({
     return (
       <ActivityIndicator
         style={styles.loader}
-        size="large"
+        size="small"
         color={Colors.primary}
       />
     );
