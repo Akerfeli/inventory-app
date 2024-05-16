@@ -90,14 +90,19 @@ const FolderSelection = ({
             name="keyboard-arrow-up"
             type="material-icons"
             color={"#aaa"}
-            size={16}
+            size={20}
           />
         </TouchableOpacity>
         {currentOpenFolder.parentId
           ? renderBackRow() /*Show go back option when non-root folder*/
           : null}
         {renderAddFolderRow()}
-        <View style={styles.listContainer}>
+        <View
+          style={[
+            styles.listContainer,
+            currentSubfolders?.length === 0 && { borderColor: "transparent" },
+          ]}
+        >
           <FlatList
             data={currentSubfolders}
             renderItem={({ item }) => (
@@ -130,14 +135,14 @@ const FolderSelection = ({
           name="keyboard-arrow-down"
           type="material-icons"
           color={"#aaa"}
-          size={16}
+          size={20}
         />
       </TouchableOpacity>
     );
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isOpen && styles.containerOpen]}>
       {isOpen ? renderOpen() : renderClosed()}
     </View>
   );
@@ -146,33 +151,41 @@ const FolderSelection = ({
 const styles = StyleSheet.create({
   container: {
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: "#ccc",
+    borderWidth: 2,
+    borderColor: "transparent",
     width: "100%",
     overflow: "hidden",
+  },
+  containerOpen: {
+    borderColor: Colors.secondary,
   },
   selected: {
     flexDirection: "row",
     backgroundColor: "white",
-    padding: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     justifyContent: "space-between",
     alignItems: "center",
+    borderRadius: 16,
   },
   selectedOpen: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: Colors.tertiary,
-    padding: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
   },
   goBackRow: {
     flexDirection: "row",
     backgroundColor: "white",
-    padding: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
   },
   addRow: {
     backgroundColor: "white",
-    padding: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
   },
   listContainer: {
     borderTopWidth: 1,
