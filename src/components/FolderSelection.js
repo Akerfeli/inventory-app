@@ -10,9 +10,9 @@ import {
 
 import { Colors } from "../globalStyles";
 
-const mockFolders = [
+const folders = [
   { id: "1", name: "Root", parentId: null },
-  { id: "2", name: "Subfolder 1", parentId: 1 },
+  { id: "2", name: "Subfolder 1", parentId: "1" },
   { id: "3", name: "Subfolder 2", parentId: "1" },
   { id: "4", name: "Subfolder 3", parentId: "1" },
   { id: "5", name: "Subsubfolder 1", parentId: "3" },
@@ -20,12 +20,12 @@ const mockFolders = [
 
 const FolderSelection = ({
   selectedFolderId,
-  setSelectedFolderId,
-  folders = mockFolders,
-  isOpen,
+  onSelectFolder,
   addFolderPressed,
 }) => {
-  const currentFolder = useMemo(() => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const currentOpenFolder = useMemo(() => {
     return folders.find((folder) => folder.id === selectedFolderId) || {};
   }, [folders, selectedFolderId]);
 
@@ -33,16 +33,27 @@ const FolderSelection = ({
     return folders.filter((folder) => folder.parentId === selectedFolderId);
   }, [folders, selectedFolderId]);
 
-  const onFolderSelected = (folderId) => {
-    setSelectedFolderId(folderId);
+  const handleFolderSelect = (folderId) => {
+    onSelectFolder(folderId);
+    //setIsOpen(false);
+  };
+
+  const toggleVisibility = () => {
+    setIsOpen(!isOpen);
   };
 
   const renderBackRow = () => {
     return (
       <TouchableOpacity
-        onPress={() => onFolderSelected(currentFolder.parentId)}
+        onPress={() => onSelectFolder(currentOpenFolder.parentId)}
       >
-        <View style={{ flexDirection: "row" }}>
+        <View style={styles.goBackRow}>
+          <Icon
+            name="keyboard-arrow-left"
+            type="material-icons"
+            color="#000"
+            size={16}
+          />
           <Text>Back</Text>
         </View>
       </TouchableOpacity>
@@ -52,7 +63,7 @@ const FolderSelection = ({
   const renderAddFolderRow = () => {
     return (
       <TouchableOpacity onPress={addFolderPressed}>
-        <View>
+        <View style={styles.addRow}>
           <Text>+ Add Folder</Text>
         </View>
       </TouchableOpacity>
@@ -62,33 +73,117 @@ const FolderSelection = ({
   const renderOpen = () => {
     return (
       <>
-        {currentFolder.parentId
+        <TouchableOpacity
+          style={styles.selectedOpen}
+          onPress={toggleVisibility}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <Icon
+              name="folder-outline"
+              type="material-community"
+              color={Colors.primary}
+              size={24}
+            />
+            <Text>{currentOpenFolder.name}</Text>
+          </View>
+          <Icon
+            name="keyboard-arrow-up"
+            type="material-icons"
+            color={"#aaa"}
+            size={16}
+          />
+        </TouchableOpacity>
+        {currentOpenFolder.parentId
           ? renderBackRow() /*Show go back option when non-root folder*/
           : null}
-        <View>
-          <Text>{currentFolder.name}</Text>
-        </View>
         {renderAddFolderRow()}
-        <FlatList
-          data={currentSubfolders}
-          renderItem={({ item, index }) => (
-            <TouchableOpacity onPress={() => onFolderSelected(item.id)}>
-              <View>
-                <Text>{item.name}</Text>
-              </View>
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item.id}
-        />
+        <View style={styles.listContainer}>
+          <FlatList
+            data={currentSubfolders}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleFolderSelect(item.id)}>
+                <View style={styles.listItem}>
+                  <Text>{item.name}</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+            keyExtractor={(item) => item.id}
+          />
+        </View>
       </>
     );
   };
 
   const renderClosed = () => {
-    return <Text>{currentFolder.name}</Text>;
+    return (
+      <TouchableOpacity style={styles.selected} onPress={toggleVisibility}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <Icon
+            name="folder-outline"
+            type="material-community"
+            color={Colors.secondary}
+            size={24}
+          />
+          <Text>{currentOpenFolder.name}</Text>
+        </View>
+        <Icon
+          name="keyboard-arrow-down"
+          type="material-icons"
+          color={"#aaa"}
+          size={16}
+        />
+      </TouchableOpacity>
+    );
   };
 
-  return <View>{isOpen ? renderOpen() : renderClosed()}</View>;
+  return (
+    <View style={styles.container}>
+      {isOpen ? renderOpen() : renderClosed()}
+    </View>
+  );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    width: "80%",
+    overflow: "hidden",
+  },
+  selected: {
+    flexDirection: "row",
+    backgroundColor: "white",
+    padding: 8,
+    justifyContent: "space-between",
+  },
+  selectedOpen: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    backgroundColor: Colors.tertiary,
+    padding: 8,
+  },
+  goBackRow: {
+    flexDirection: "row",
+    backgroundColor: "white",
+    padding: 8,
+  },
+  addRow: {
+    backgroundColor: "white",
+    padding: 8,
+  },
+  listContainer: {
+    borderTopWidth: 1,
+    borderColor: "#ccc",
+    backgroundColor: "white",
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+  },
+  listItem: {
+    padding: 8,
+  },
+});
 
 export default FolderSelection;
