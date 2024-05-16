@@ -1,5 +1,5 @@
 import { SearchBar, Icon } from "@rneui/themed";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -26,7 +26,7 @@ const HomeScreen = () => {
     firebaseFunction: () => getRootContentAndFolderContent(userState.id),
   }); */
 
-  const params = [userState.root];
+  const params = "hMJWNp4qoL9LMtRq5WWf";
   const { dataItems, isLoadingItems, errorItems } = useNewFetch(
     getItems,
     params
@@ -36,11 +36,21 @@ const HomeScreen = () => {
     params
   );
 
-  const flatContent = useFlattenFolderContent(folderData);
+  const isLoading = isLoadingItems || isLoadingSubfolders;
 
-  const updateSearch = (query) => {
-    setSearchQuery(query); // ToDo
-  };
+  console.log("loading", dataItems);
+
+  const flatContent = useMemo(() => {
+    if (!isLoading || !dataSubfolders || !dataItems) {
+      return null;
+    }
+
+    const flatArray = dataSubfolders
+      .map((subfolder) => ({ ...subfolder, type: "folder" }))
+      .concat(dataItems.map((obj) => ({ ...obj, type: "object" })));
+
+    return flatArray;
+  }, [dataItems, dataSubfolders, isLoading]);
 
   const renderEmptyPrompt = () => {
     return (
@@ -70,9 +80,10 @@ const HomeScreen = () => {
       <FolderCreationModal
         modalVisible={modalVisible}
         onClose={() => setModalVisible(false)}
-        parentFolder={folderData.id}
+        parentFolder="hMJWNp4qoL9LMtRq5WWf"
         onAdded={() => setModalVisible(false)}
       />
+      {/*
       <SearchBar
         platform="android"
         placeholder="Search"
@@ -86,14 +97,14 @@ const HomeScreen = () => {
         searchIcon={{ name: "search", type: "ionicon" }}
         leftIconContainerStyle={{ paddingLeft: 8 }}
         rightIconContainerStyle={{ paddingRight: 8 }}
-      />
+      />*/}
       <FolderMenu
         folderName="Home"
         onAddFolderPressed={() => setModalVisible(true)}
       />
 
-      {folderData && <FolderContent folderData={flatContent} folderName="" />}
-      {flatContent.length === 0 && renderEmptyPrompt()}
+      {flatContent && <FolderContent folderData={flatContent} folderName="" />}
+      {flatContent && flatContent.length === 0 && renderEmptyPrompt()}
     </SafeAreaView>
   );
 };
