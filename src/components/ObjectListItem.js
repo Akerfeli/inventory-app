@@ -1,5 +1,5 @@
 import { CheckBox } from "@rneui/themed";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { TouchableWithoutFeedback, View, Text, StyleSheet } from "react-native";
 
 import AmountButton from "./AmountButton";
@@ -7,6 +7,61 @@ import { Colors } from "../globalStyles";
 import { editItem } from "../services/firebaseService";
 
 const ObjectListItem = ({ item, onEditPressed }) => {
+  const [localItem, setLocalItem] = useState(item); // For optimistic updates
+
+  useEffect(() => {
+    // Check if the received item is newer than the localItem
+    if (!localItem.timestamp || item.timestamp > localItem.timestamp) {
+      setLocalItem(item);
+    }
+  }, [item]);
+
+  const handleChangeAmount = async (newAmount) => {
+    const timestamp = Date.now();
+
+    // Optimistic update
+    setLocalItem((prevItem) => ({
+      ...prevItem,
+      amount: newAmount,
+      timeChanged: timestamp,
+    }));
+
+    try {
+      await editItem(item.id, item.parentId, {
+        amount: newAmount,
+        timeChanged: timestamp,
+      });
+    } catch (error) {
+      console.log(
+        "An error occurred when changing value for amount in item:",
+        error
+      );
+    }
+  };
+
+  const handleFavoritePressed = async () => {
+    const timestamp = Date.now();
+
+    // Optimistic update
+    setLocalItem((prevItem) => ({
+      ...prevItem,
+      favoriteList: !localItem.favoriteList,
+      timeChanged: timestamp,
+    }));
+
+    try {
+      await editItem(item.id, item.parentId, {
+        favoriteList: !localItem.favoriteList,
+        timeChanged: timestamp,
+      });
+    } catch (error) {
+      console.log(
+        "An error occurred when changing value for favoriteList in item:",
+        error
+      );
+    }
+  };
+
   const renderLeftContainer = () => {
     return (
       <View style={styles.leftContainer}>
@@ -19,45 +74,22 @@ const ObjectListItem = ({ item, onEditPressed }) => {
             ellipsizeMode="tail"
           >
             {/*ToDo: fix indentation which currently adds a space to the description text*/}
-            {item.description}
+            {localItem.description}
           </Text>
         </View>
       </View>
     );
   };
 
-  const handleChangeAmount = async (newAmount) => {
-    try {
-      await editItem(item.id, item.parentId, {
-        amount: newAmount,
-      });
-    } catch (error) {
-      console.log(
-        "An error occurred when changing value for amount in item:",
-        error
-      );
-    }
-  };
-
-  const handleFavoritePressed = async () => {
-    try {
-      await editItem(item.id, item.parentId, {
-        favoriteList: !item.favoriteList,
-      });
-    } catch (error) {
-      console.log(
-        "An error occurred when changing value for favoriteList in item:",
-        error
-      );
-    }
-  };
-
   const renderRightContainer = () => {
     return (
       <View style={[styles.rightContainer]}>
-        <AmountButton amount={item.amount} changeAmount={handleChangeAmount} />
+        <AmountButton
+          amount={localItem.amount}
+          changeAmount={handleChangeAmount}
+        />
         <CheckBox
-          checked={item.favoriteList}
+          checked={localItem.favoriteList}
           checkedIcon="heart"
           uncheckedIcon="heart-o"
           checkedColor={Colors.accent}
@@ -69,7 +101,8 @@ const ObjectListItem = ({ item, onEditPressed }) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => onEditPressed(item.id)}>
+    <TouchableWithoutFeedback>
+      {/*ToDo: implement on press => edit item */}
       <View style={styles.container}>
         {renderLeftContainer()}
         {renderRightContainer()}
