@@ -177,6 +177,57 @@ async function deleteDocumentByPath(collectionPath) {
 }
 
 export async function deleteFolder(topFolderId) {
+  const rootFolderId = topFolderId.parentID;
+  try {
+    const folderIds = await getFolderIds(topFolderId);
+    const batch = writeBatch(db);
+
+    for (const folderId of folderIds) {
+      // Delete items in the current folder
+      await deleteDocumentByPath(`folder-data/${folderId}/items`);
+
+      // Query and delete subfolders
+      const subfoldersQuery = query(
+        collection(db, `folder-data/${folderId}/subfolders`)
+      );
+      const subfoldersSnapshot = await getDocs(subfoldersQuery);
+      subfoldersSnapshot.forEach((subfolderDoc) => {
+        batch.delete(subfolderDoc.ref);
+      });
+
+      // Delete current folder
+      const folderDocRef = doc(db, "folder-data", folderId);
+      batch.delete(folderDocRef);
+    }
+
+    //Delete the reference from  the root folders subfolders
+    
+
+    const rootSubfoldersQuery = query(
+      collection(db, `folder-data/${rootFolderId}/subfolders`),
+      where("folderId", "==", topFolderId)
+    );
+
+    const subfoldersSnapshot = await getDocs(rootSubfoldersQuery);
+
+    console.log("rootFolderId", rootFolderId);
+    console.log("SubFolder", subfoldersSnapshot.docs);
+
+    if (!subfoldersSnapshot.empty) {
+      const subfolderDoc = subfoldersSnapshot.docs[0];
+      batch.delete(subfolderDoc.ref);
+    }
+
+    // Commit the batched write
+    await batch.commit();
+    console.log("Folders and associated items deleted successfully.");
+  } catch (error) {
+    console.error("Error deleting folders and associated items:", error);
+    throw error;
+  }
+}
+
+/* export async function deleteFolder(topFolderId) {
   const folderIds = await getFolderIds(topFolderId);
 
   for (const folderId of folderIds) {
@@ -198,7 +249,7 @@ export async function deleteFolder(topFolderId) {
     });
     await batch.commit();
   }
-}
+} */
 
 export async function getFolderIds(folderId, folderIds = new Set()) {
   // Get a reference to the folder document

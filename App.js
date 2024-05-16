@@ -66,7 +66,8 @@ export default function App() {
 function AppContent() {
   const { userState } = useAuth();
 
-  getFolderIds("hMJWNp4qoL9LMtRq5WWf");
+  getFolderIds("M2UsMeNZ6X1O8qWJoT80");
+  deleteFolder("Oref4xHic3wSO1xxybXT");
 
   /*   getFolderIds("hMJWNp4qoL9LMtRq5WWf")
     .then((folderIds) => {
