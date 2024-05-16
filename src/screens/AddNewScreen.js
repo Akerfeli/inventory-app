@@ -54,26 +54,17 @@ const AddNewScreen = () => {
         }}
         overScrollMode="never"
       >
-        <View
-          style={{
-            flex: 1,
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <FolderCreationModal
-            modalVisible={modalVisible}
-            onClose={() => setModalVisible(false)}
-            parentFolder={selectedFolderId}
-            onAdded={() => setModalVisible(false)}
-          />
-          <ItemForm
-            onAddFolderPressed={() => setModalVisible(true)}
-            selectedFolderId={selectedFolderId}
-            setSelectedFolderId={setSelectedFolderId}
-          />
-        </View>
+        <FolderCreationModal
+          modalVisible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          parentFolder={selectedFolderId}
+          onAdded={() => setModalVisible(false)}
+        />
+        <ItemForm
+          onAddFolderPressed={() => setModalVisible(true)}
+          selectedFolderId={selectedFolderId}
+          setSelectedFolderId={setSelectedFolderId}
+        />
       </ScrollView>
     </TouchableWithoutFeedback>
   );
