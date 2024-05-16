@@ -181,16 +181,16 @@ async function deleteDocumentByPath(collectionPath) {
 }
 
 export async function deleteFolder(topFolderId) {
-  // Get the document reference for the top folder
-  const topFolderRef = doc(db, "folder-data", topFolderId);
-
-  // Get the top folder document
-  const topFolderDoc = await getDoc(topFolderRef);
-
-  // Get the parentId from the top folder document
-  const parentFolderId = topFolderDoc.data().parentId;
-
   try {
+    // Get the document reference for the top folder
+    const topFolderRef = doc(db, "folder-data", topFolderId);
+
+    // Get the top folder document
+    const topFolderDoc = await getDoc(topFolderRef);
+    console.log("topFolder:", topFolderDoc.data);
+
+    // Get the parentId from the top folder document
+    const parentFolderId = topFolderDoc.data().parentId;
     const folderIds = await getFolderIds(topFolderId);
     const batch = writeBatch(db);
 
@@ -315,7 +315,8 @@ export const createFolder = async (folderName, parentId, uid) => {
             folderId: folderRef.id,
             timestamp: folderData.timeCreated,
           };
-          transaction.set(doc(subfolderCollectionRef), subfolderData);
+          const subfolderDocRef = doc(subfolderCollectionRef, folderRef.id);
+          transaction.set(subfolderDocRef, subfolderData);
         } else {
           throw new Error("Parent folder does not exist");
         }
