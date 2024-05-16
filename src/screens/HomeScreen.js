@@ -8,9 +8,7 @@ import FolderCreationModal from "../components/FolderCreationModal";
 import FolderMenu from "../components/FolderMenu";
 import { useAuth } from "../contexts/AuthContext";
 import { Colors, Styles } from "../globalStyles";
-import useFetch from "../hooks/useFetch";
 import useFlattenFolderContent from "../hooks/useFlattenFolderContent";
-import { getRootContentAndFolderContent } from "../services/firebaseService";
 import useNewFetch from "../hooks/useNewFetch";
 import { getItems, getSubFolders } from "../services/firebaseNewService";
 
@@ -18,27 +16,23 @@ const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState();
   const { userState } = useAuth();
-  /*  const {
-    data: folderData,
-    isLoading,
-    error,
-  } = useFetch({
-    firebaseFunction: () => getRootContentAndFolderContent(userState.id),
-  }); */
 
-  const params = "hMJWNp4qoL9LMtRq5WWf";
-  const { dataItems, isLoadingItems, errorItems } = useNewFetch(
-    getItems,
-    params
-  );
-  const { dataSubfolders, isLoadingSubfolders, errorSubfolders } = useNewFetch(
-    getSubFolders,
-    params
-  );
+  const params = [userState.root];
+  const {
+    data: dataItems,
+    isLoading: isLoadingItems,
+    error: errorItems,
+  } = useNewFetch(getItems, params);
+  const {
+    data: dataSubfolders,
+    isLoading: isLoadingSubfolders,
+    error: errorSubfolders,
+  } = useNewFetch(getSubFolders, params);
 
   const isLoading = isLoadingItems || isLoadingSubfolders;
 
-  console.log("loading", dataItems);
+  console.log("loading items", dataItems);
+  console.log("loading subfolder", dataSubfolders);
 
   const flatContent = useMemo(() => {
     if (!isLoading || !dataSubfolders || !dataItems) {

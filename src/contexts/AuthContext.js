@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
         id: user.uid,
         email: user.email,
         isSignedIn: true,
-        root: data.createdBy,
+        root: data.id,
       };
       setUserState(newUserState);
       await storeUserState(newUserState); // Store user state
