@@ -21,7 +21,7 @@ const FolderMenu = ({ folderName, onAddFolderPressed }) => {
       }}
     >
       <Icon
-        name="folder-plus-outline"
+        name="folder-plus"
         type="material-community"
         color={Colors.primary}
         size={40}

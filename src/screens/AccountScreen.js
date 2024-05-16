@@ -12,7 +12,7 @@ const AccountScreen = () => {
       <TouchableOpacity
         onPress={() => signOut()}
         style={{
-          height: 48,
+          height: 40,
           width: "50%",
           flexDirection: "row",
           alignItems: "center",
@@ -26,7 +26,7 @@ const AccountScreen = () => {
           name="logout"
           type="material-community"
           color={Colors.primary}
-          size={32}
+          size={24}
         />
         <Text style={{ fontWeight: "bold" }}>Sign out</Text>
       </TouchableOpacity>
