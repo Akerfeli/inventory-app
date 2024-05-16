@@ -53,13 +53,14 @@ const HomeScreen = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, padding: 8 }}>
+    <SafeAreaView style={{ flex: 1, padding: 4 }}>
       <FolderCreationModal
         modalVisible={modalVisible}
         onClose={() => setModalVisible(false)}
         parentFolder={folderData.id}
         onAdded={() => setModalVisible(false)}
       />
+      {/*
       <SearchBar
         platform="android"
         placeholder="Search"
@@ -73,7 +74,7 @@ const HomeScreen = () => {
         searchIcon={{ name: "search", type: "ionicon" }}
         leftIconContainerStyle={{ paddingLeft: 8 }}
         rightIconContainerStyle={{ paddingRight: 8 }}
-      />
+      />*/}
       <FolderMenu
         folderName="Home"
         onAddFolderPressed={() => setModalVisible(true)}

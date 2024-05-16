@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 12,
+    paddingHorizontal: 4,
   },
   leftContainer: {
     flexDirection: "row",
