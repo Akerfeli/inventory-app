@@ -39,29 +39,33 @@ If the phone and the computer are in different networks:
 
 ## Usage
 
+- (OBS) we have a bug where new users folders and items won't show up sign out and in again and this will fix it
 - To register for the app press *Sign up* and provide an e-mail and password (atleast 8 charachtrers). You will be signed in automatically when signing up and stay signed in until you sign out, even
-  if you close the app.
+  if you close the app
 - To add a folder, press the green folder in the top right corner and provide a folder name.
 - To add an item press the ➕-sign in the bottom menu and provide the information about the item. The item will be added in the current folder unless you choose another folder. You can also add a new folder
   to put the new item in.
-- (OBS) we have a bug where new users folders and items won't show up sign out and in again and this will fix it 
 - Delete an item or folder by swiping left and pressing *Delete*. Deleting a folder will delete all items and subfolders in that folder.
 - Press the ❤️ in the bottom menu to look at your favorites. Register or unrigister an item as a favorite by pressing the ❤️ next to the item.
 - Press the 📃-symbol in the bottom menu to look at your shopping list. When you have purchased an item you can check the box next to the item. To remove all checked items, press the *Remove checked items*-button
-  on top of the screen. You can also remove an item from the list by swiping left and pressing *Remove from list*.
-- To sign out, press the symbol to the far right in the bottom menu and press *Sign out*. Don't worry, your items will still be here when you get back.
+  on top of the screen. You can also remove an item from the list by swiping left and pressing *Remove from list*
+- To sign out, press the symbol to the far right in the bottom menu and press *Sign out*. Don't worry, your items will still be here when you get back
 
 
 ## Future features and improvements
 
-- Possibility to share chosen folder with others.
-- Edit and move items and folders.
+- Possibility to share chosen folder with others
+- Edit and move items and folders
 - Add images of the items
 - Show items based on category
 - Search and filter items
 - Prevent duplicates
 - Optimistic updates on all screens
-
+- Refactor the code and general code cleanup (remove unused imports)
+- Root folder id could have been based on user uid
+- Implement scroll on form
+- Loading indicator on swipe delete
+- Debouncing or throtteling of amount update
 
 
 
