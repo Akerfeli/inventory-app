@@ -60,13 +60,13 @@ const FolderSelection = ({
     if (!isLoading && folders && selectedFolderId) {
       return folders.find((folder) => folder.id === selectedFolderId) || {};
     }
-  }, [folders, selectedFolderId]);
+  }, [folders, selectedFolderId, isLoading]);
 
   const currentSubfolders = useMemo(() => {
     if (!isLoading && folders && selectedFolderId) {
       return folders.filter((folder) => folder.parentId === selectedFolderId);
     }
-  }, [folders, selectedFolderId]);
+  }, [folders, selectedFolderId, isLoading]);
 
   const handleFolderSelect = (folderId) => {
     onSelectFolder(folderId);

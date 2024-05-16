@@ -31,9 +31,9 @@ const AddNewScreen = () => {
         );
 
         const folderId = latestItemFolderRoute?.params?.folderId;
-        setNavigatedFolderId(folderId);
+        setSelectedFolderId(folderId);
       } else {
-        setNavigatedFolderId(null);
+        setSelectedFolderId(null);
       }
     }, [navigation])
   );
