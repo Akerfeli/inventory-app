@@ -5,8 +5,8 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  FlatList,
 } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 
 import { useAuth } from "../contexts/AuthContext";
 import { Colors } from "../globalStyles";
@@ -76,6 +76,7 @@ const CategorySelection = ({ onSelectCategory, selectedCategory }) => {
       {isDropdownVisible && ( // Render dropdown only if isDropdownVisible is true
         <View style={styles.listContainer}>
           <FlatList
+            nestedScrollEnabled={true}
             data={filteredCategories}
             renderItem={({ item }) => (
               <TouchableOpacity
@@ -113,6 +114,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     backgroundColor: "white",
+    maxHeight: 300,
   },
   listItem: {
     padding: 12,

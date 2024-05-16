@@ -1,11 +1,7 @@
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import React, { useState, useCallback } from "react";
-import {
-  View,
-  TouchableWithoutFeedback,
-  Keyboard,
-  ScrollView,
-} from "react-native";
+import { View, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 import FolderCreationModal from "../components/FolderCreationModal";
 import ItemForm from "../components/ItemForm";
@@ -49,6 +45,7 @@ const AddNewScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView
+        nestedScrollEnabled={true}
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent: "center",

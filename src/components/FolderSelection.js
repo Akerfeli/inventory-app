@@ -1,12 +1,7 @@
 import { Icon } from "@rneui/themed";
 import React, { useState, useMemo } from "react";
-import {
-  View,
-  FlatList,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 
 import { Colors } from "../globalStyles";
 
@@ -104,6 +99,7 @@ const FolderSelection = ({
           ]}
         >
           <FlatList
+            nestedScrollEnabled={true}
             data={currentSubfolders}
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => handleFolderSelect(item.id)}>
@@ -134,7 +130,7 @@ const FolderSelection = ({
         <Icon
           name="keyboard-arrow-down"
           type="material-icons"
-          color={"#aaa"}
+          color="#aaa"
           size={20}
         />
       </TouchableOpacity>
@@ -155,7 +151,7 @@ const styles = StyleSheet.create({
     borderColor: "white",
     width: "100%",
     overflow: "hidden",
-    minHeight: 40,
+    minheight: 40,
   },
   containerOpen: {
     borderColor: Colors.secondary,
@@ -164,7 +160,7 @@ const styles = StyleSheet.create({
   selected: {
     flexDirection: "row",
     backgroundColor: "white",
-    paddingVertical: 8,
+    paddingVertical: 6,
     paddingHorizontal: 12,
     justifyContent: "space-between",
     alignItems: "center",
@@ -174,7 +170,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: Colors.tertiary,
-    paddingVertical: 8,
+    paddingVertical: 6,
     paddingHorizontal: 12,
   },
   goBackRow: {
@@ -192,6 +188,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: "#ccc",
     backgroundColor: "white",
+    maxHeight: 500,
   },
   listItem: {
     padding: 8,
