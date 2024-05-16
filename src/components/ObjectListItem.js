@@ -74,18 +74,20 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 12,
-    paddingHorizontal: 4,
+    paddingHorizontal: 8,
   },
   leftContainer: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+    flex: 1,
   },
   rightContainer: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
+    marginLeft: 4,
   },
   imageContainer: {
     alignItems: "center",

@@ -53,7 +53,7 @@ const HomeScreen = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, padding: 4 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <FolderCreationModal
         modalVisible={modalVisible}
         onClose={() => setModalVisible(false)}

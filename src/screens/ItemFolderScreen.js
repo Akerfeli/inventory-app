@@ -31,7 +31,6 @@ const ItemFolderScreen = () => {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        padding: 4,
       }}
     >
       <FolderCreationModal
