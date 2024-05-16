@@ -9,7 +9,6 @@ By keeping the information in the app updated, the user can save a lot of time a
 - [Features](#features)
 - [Usage](#usage)
 - [Future features and improvements](#future-features-and-improvements)
-- [Screenshots](#screenshots)
 
 ## Installation
 
@@ -61,8 +60,6 @@ If the phone and the computer are in different networks:
 - Search and filter items
 - Prevent duplicates
 
-## Screenshots
 
-### Sign in screen
-![dsds](https://drive.google.com/file/d/1FaA3qYW5zUiaG-2LqYx2ehRpnRju4h_v/uc?export=view)
+
 
