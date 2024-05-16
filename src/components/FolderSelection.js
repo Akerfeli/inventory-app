@@ -89,7 +89,7 @@ const FolderSelection = ({
           <Icon
             name="keyboard-arrow-up"
             type="material-icons"
-            color={"#aaa"}
+            color={Colors.primary}
             size={20}
           />
         </TouchableOpacity>
@@ -152,12 +152,14 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: "transparent",
+    borderColor: "white",
     width: "100%",
     overflow: "hidden",
+    minHeight: 40,
   },
   containerOpen: {
     borderColor: Colors.secondary,
+    height: "auto",
   },
   selected: {
     flexDirection: "row",
@@ -166,7 +168,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     justifyContent: "space-between",
     alignItems: "center",
-    borderRadius: 16,
   },
   selectedOpen: {
     flexDirection: "row",
