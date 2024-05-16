@@ -10,16 +10,12 @@ import ItemForm from "../components/ItemForm";
 const AddNewScreen = () => {
   const navigation = useNavigation();
   const [navigatedFolderId, setNavigatedFolderId] = useState(null);
-  const [selectedFolderId, setSelectedFolderId] = useState(
-    "M2UsMeNZ6X1O8qWJoT80"
-  );
+  const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [initialFormData, setInitialFormData] = useState({}); //ToDo: add something here?
 
   // On focus, update navigatedFolderId
   useFocusEffect(
-    // ToDo: If folder structure is not auto updated with subscription, fetch it again here.
-
     useCallback(() => {
       const navigationState = navigation.getState();
       const homeStackState = navigationState.routes.find(
@@ -35,9 +31,9 @@ const AddNewScreen = () => {
         );
 
         const folderId = latestItemFolderRoute?.params?.folderId;
-        setNavigatedFolderId(folderId);
+        setSelectedFolderId(folderId);
       } else {
-        setNavigatedFolderId(null);
+        setSelectedFolderId(null);
       }
     }, [navigation])
   );

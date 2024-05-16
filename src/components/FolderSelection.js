@@ -1,17 +1,27 @@
 import { Icon } from "@rneui/themed";
-import React, { useState, useMemo } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState, useMemo, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
+import { useAuth } from "../contexts/AuthContext";
 import { Colors } from "../globalStyles";
+import useFetch from "../hooks/useFetch";
+import { getAllFolders } from "../services/firebaseService";
 
+/*
 const folders = [
   { id: "1", name: "Root", parentId: null },
   { id: "2", name: "Subfolder 1", parentId: "1" },
   { id: "3", name: "Subfolder 2", parentId: "1" },
   { id: "4", name: "Subfolder 3", parentId: "1" },
   { id: "5", name: "Subsubfolder 1", parentId: "3" },
-];
+];*/
 
 const FolderSelection = ({
   selectedFolderId,
@@ -19,14 +29,44 @@ const FolderSelection = ({
   onAddFolderPressed,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { userState } = useAuth();
+
+  const {
+    data: folders,
+    isLoading,
+    error,
+  } = useFetch({
+    firebaseFunction: () => getAllFolders(userState.id),
+  });
+
+  console.log("folders: ", folders);
+  console.log("selectedFolder: ", selectedFolderId);
+
+  useEffect(() => {
+    // If selected folder does not exist in list, set selected to root
+    if (
+      !isLoading &&
+      folders &&
+      folders.length > 0 &&
+      (!selectedFolderId ||
+        !folders.find((folder) => folder.id === selectedFolderId))
+    ) {
+      const root = folders.find((folder) => folder.parentId === null);
+      onSelectFolder(root.id);
+    }
+  }, [folders, selectedFolderId, isLoading]);
 
   const currentOpenFolder = useMemo(() => {
-    return folders.find((folder) => folder.id === selectedFolderId) || {};
-  }, [folders, selectedFolderId]);
+    if (!isLoading && folders && selectedFolderId) {
+      return folders.find((folder) => folder.id === selectedFolderId) || {};
+    }
+  }, [folders, selectedFolderId, isLoading]);
 
   const currentSubfolders = useMemo(() => {
-    return folders.filter((folder) => folder.parentId === selectedFolderId);
-  }, [folders, selectedFolderId]);
+    if (!isLoading && folders && selectedFolderId) {
+      return folders.filter((folder) => folder.parentId === selectedFolderId);
+    }
+  }, [folders, selectedFolderId, isLoading]);
 
   const handleFolderSelect = (folderId) => {
     onSelectFolder(folderId);
@@ -79,7 +119,7 @@ const FolderSelection = ({
               color={Colors.secondary}
               size={24}
             />
-            <Text>{currentOpenFolder.name}</Text>
+            <Text>{currentOpenFolder?.name}</Text>
           </View>
           <Icon
             name="keyboard-arrow-up"
@@ -104,7 +144,7 @@ const FolderSelection = ({
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => handleFolderSelect(item.id)}>
                 <View style={styles.listItem}>
-                  <Text>{item.name}</Text>
+                  <Text>{item?.name}</Text>
                 </View>
               </TouchableOpacity>
             )}
@@ -125,7 +165,7 @@ const FolderSelection = ({
             color={Colors.secondary}
             size={24}
           />
-          <Text>{currentOpenFolder.name}</Text>
+          <Text>{currentOpenFolder?.name}</Text>
         </View>
         <Icon
           name="keyboard-arrow-down"
@@ -136,6 +176,16 @@ const FolderSelection = ({
       </TouchableOpacity>
     );
   };
+
+  if (isLoading || !folders || !selectedFolderId) {
+    return (
+      <ActivityIndicator
+        style={styles.loader}
+        size="large"
+        color={Colors.primary}
+      />
+    );
+  }
 
   return (
     <View style={[styles.container, isOpen && styles.containerOpen]}>

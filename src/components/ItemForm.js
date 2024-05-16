@@ -80,7 +80,7 @@ const ItemForm = ({
       <View style={{ marginBottom: 16 }}>
         <Text style={Styles.textLabel}>Folder</Text>
         <FolderSelection
-          selectedFolderId={formData.selectedFolderId}
+          selectedFolderId={selectedFolderId}
           onSelectFolder={(folderId) => setSelectedFolderId(folderId)}
           onAddFolderPressed={onAddFolderPressed}
         />
