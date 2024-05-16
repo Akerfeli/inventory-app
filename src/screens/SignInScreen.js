@@ -1,6 +1,13 @@
 import { useNavigation, useIsFocused } from "@react-navigation/native"; // Import useNavigation hook
 import React, { useState, useEffect } from "react";
-import { Image, View, TouchableOpacity, Text } from "react-native";
+import {
+  Image,
+  View,
+  TouchableOpacity,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { Input } from "react-native-elements";
 
 import BirdLogo from "../../assets/bird-logo.png";
@@ -41,46 +48,48 @@ const SignInScreen = () => {
   };
 
   return (
-    <View style={[Styles.container, Styles.centerItemsContainer]}>
-      <Image
-        source={BirdLogo}
-        style={{ width: 200, height: 200, margin: 10, marginBottom: 20 }}
-      />
-      <Text style={[Styles.heading, { fontSize: 20 }]}>NestKeep</Text>
-      <Input
-        placeholder="email@adress.com"
-        leftIcon={{ name: "mail", type: "ionicon", color: Colors.heading }}
-        autoCapitalize="none"
-        onChangeText={(text) => setEmail(text)}
-        errorMessage={
-          <Text style={{ color: Colors.textError }}>{errors.email}</Text>
-        }
-        inputStyle={Styles.textPrimary}
-      />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={[Styles.container, Styles.centerItemsContainer]}>
+        <Image
+          source={BirdLogo}
+          style={{ width: 200, height: 200, margin: 10, marginBottom: 20 }}
+        />
+        <Text style={[Styles.heading, { fontSize: 20 }]}>NestKeep</Text>
+        <Input
+          placeholder="email@adress.com"
+          leftIcon={{ name: "mail", type: "ionicon", color: Colors.heading }}
+          autoCapitalize="none"
+          onChangeText={(text) => setEmail(text)}
+          errorMessage={
+            <Text style={{ color: Colors.textError }}>{errors.email}</Text>
+          }
+          inputStyle={Styles.textPrimary}
+        />
 
-      <Input
-        placeholder="Password"
-        leftIcon={{
-          name: "lock-closed",
-          type: "ionicon",
-          color: Colors.heading,
-        }}
-        onChangeText={(text) => setPassword(text)}
-        autoCapitalize="none"
-        secureTextEntry={true}
-        errorMessage={
-          <Text style={{ color: Colors.textError }}>{errors.password}</Text>
-        }
-        inputStyle={Styles.textPrimary}
-      />
-      <TouchableOpacity style={Styles.primaryButton} onPress={handleSignIn}>
-        {/* Customized button text */}
-        <Text style={Styles.primaryButtonText}>Login</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => handleSignUp()}>
-        <Text style={[Styles.textLink, { marginVertical: 8 }]}>Sign Up</Text>
-      </TouchableOpacity>
-    </View>
+        <Input
+          placeholder="Password"
+          leftIcon={{
+            name: "lock-closed",
+            type: "ionicon",
+            color: Colors.heading,
+          }}
+          onChangeText={(text) => setPassword(text)}
+          autoCapitalize="none"
+          secureTextEntry={true}
+          errorMessage={
+            <Text style={{ color: Colors.textError }}>{errors.password}</Text>
+          }
+          inputStyle={Styles.textPrimary}
+        />
+        <TouchableOpacity style={Styles.primaryButton} onPress={handleSignIn}>
+          {/* Customized button text */}
+          <Text style={Styles.primaryButtonText}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSignUp()}>
+          <Text style={[Styles.textLink, { marginVertical: 8 }]}>Sign Up</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

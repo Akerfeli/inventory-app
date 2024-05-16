@@ -1,5 +1,5 @@
 import { SearchBar, Icon } from "@rneui/themed";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -8,26 +8,43 @@ import FolderCreationModal from "../components/FolderCreationModal";
 import FolderMenu from "../components/FolderMenu";
 import { useAuth } from "../contexts/AuthContext";
 import { Colors, Styles } from "../globalStyles";
-import useFetch from "../hooks/useFetch";
 import useFlattenFolderContent from "../hooks/useFlattenFolderContent";
-import { getRootContentAndFolderContent } from "../services/firebaseService";
+import useNewFetch from "../hooks/useNewFetch";
+import { getItems, getSubFolders } from "../services/firebaseNewService";
 
 const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState();
   const { userState } = useAuth();
-  const {
-    data: folderData,
-    isLoading,
-    error,
-  } = useFetch({
-    firebaseFunction: () => getRootContentAndFolderContent(userState.id),
-  });
-  const flatContent = useFlattenFolderContent(folderData);
 
-  const updateSearch = (query) => {
-    setSearchQuery(query); // ToDo
-  };
+  const params = [userState.root];
+  const {
+    data: dataItems,
+    isLoading: isLoadingItems,
+    error: errorItems,
+  } = useNewFetch(getItems, params);
+  const {
+    data: dataSubfolders,
+    isLoading: isLoadingSubfolders,
+    error: errorSubfolders,
+  } = useNewFetch(getSubFolders, params);
+
+  const isLoading = isLoadingItems || isLoadingSubfolders;
+
+  console.log("loading items", dataItems);
+  console.log("loading subfolder", dataSubfolders);
+
+  const flatContent = useMemo(() => {
+    if (isLoading || !dataSubfolders || !dataItems) {
+      return null;
+    }
+
+    const flatArray = dataSubfolders
+      .map((subfolder) => ({ ...subfolder, type: "folder" }))
+      .concat(dataItems.map((obj) => ({ ...obj, type: "object" })));
+
+    return flatArray;
+  }, [dataItems, dataSubfolders, isLoading]);
 
   const renderEmptyPrompt = () => {
     return (
@@ -57,7 +74,7 @@ const HomeScreen = () => {
       <FolderCreationModal
         modalVisible={modalVisible}
         onClose={() => setModalVisible(false)}
-        parentFolder={folderData.id}
+        parentFolder="hMJWNp4qoL9LMtRq5WWf"
         onAdded={() => setModalVisible(false)}
       />
       {/*
@@ -80,8 +97,8 @@ const HomeScreen = () => {
         onAddFolderPressed={() => setModalVisible(true)}
       />
 
-      {folderData && <FolderContent folderData={flatContent} folderName="" />}
-      {flatContent.length === 0 && renderEmptyPrompt()}
+      {flatContent && <FolderContent folderData={flatContent} folderName="" />}
+      {flatContent && flatContent.length === 0 && renderEmptyPrompt()}
     </SafeAreaView>
   );
 };
