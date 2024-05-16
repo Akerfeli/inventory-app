@@ -11,18 +11,31 @@ import { Colors, Styles } from "../globalStyles";
 import useFetch from "../hooks/useFetch";
 import useFlattenFolderContent from "../hooks/useFlattenFolderContent";
 import { getRootContentAndFolderContent } from "../services/firebaseService";
+import useNewFetch from "../hooks/useNewFetch";
+import { getItems, getSubFolders } from "../services/firebaseNewService";
 
 const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState();
   const { userState } = useAuth();
-  const {
+  /*  const {
     data: folderData,
     isLoading,
     error,
   } = useFetch({
     firebaseFunction: () => getRootContentAndFolderContent(userState.id),
-  });
+  }); */
+
+  const params = [userState.root];
+  const { dataItems, isLoadingItems, errorItems } = useNewFetch(
+    getItems,
+    params
+  );
+  const { dataSubfolders, isLoadingSubfolders, errorSubfolders } = useNewFetch(
+    getSubFolders,
+    params
+  );
+
   const flatContent = useFlattenFolderContent(folderData);
 
   const updateSearch = (query) => {
