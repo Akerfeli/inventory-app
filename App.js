@@ -137,6 +137,7 @@ function AppContent() {
             name="Add New"
             component={AddNewScreen}
             options={{
+              unmountOnBlur: true,
               tabBarIcon: ({ focused, color, size }) => (
                 <MaterialCommunityIcons
                   name="plus-circle"
