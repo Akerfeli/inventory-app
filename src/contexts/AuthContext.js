@@ -6,8 +6,7 @@ import {
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 import { auth } from "../../firebaseConfig";
-import useFetch from "../hooks/useFetch";
-import { createRootFolder } from "../services/firebaseService";
+import { createRootFolder, getRootContent } from "../services/firebaseService";
 
 const AuthContext = createContext();
 
@@ -20,6 +19,7 @@ export const AuthProvider = ({ children }) => {
     id: "",
     email: "",
     isSignedIn: false,
+    root: "",
   });
 
   // Function to store user authentication state
@@ -55,10 +55,12 @@ export const AuthProvider = ({ children }) => {
         password
       );
       const user = userCredentials.user;
+      const data = await getRootContent(user.uid);
       const newUserState = {
         id: user.uid,
         email: user.email,
         isSignedIn: true,
+        root: data.createdBy,
       };
       setUserState(newUserState);
       await storeUserState(newUserState); // Store user state
