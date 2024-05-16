@@ -13,7 +13,6 @@ import {
   getDoc,
   setDoc,
   serverTimestamp,
-  writeBatch,
 } from "firebase/firestore";
 
 import { db } from "../../firebaseConfig";

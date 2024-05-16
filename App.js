@@ -67,7 +67,6 @@ function AppContent() {
   const { userState } = useAuth();
 
   getFolderIds("M2UsMeNZ6X1O8qWJoT80");
-  deleteFolder("HpCCHfMKggx7wrQjZpa8");
 
   /*   getFolderIds("hMJWNp4qoL9LMtRq5WWf")
     .then((folderIds) => {
