@@ -6,6 +6,7 @@ import Breadcrumbs from "../components/Breadcrumbs";
 import FolderContent from "../components/FolderContent";
 import FolderCreationModal from "../components/FolderCreationModal";
 import FolderMenu from "../components/FolderMenu";
+import { Colors } from "../globalStyles";
 import useFetch from "../hooks/useFetch";
 import useFlattenFolderContent from "../hooks/useFlattenFolderContent";
 import { getFolderContentById } from "../services/firebaseService";
@@ -30,8 +31,6 @@ const ItemFolderScreen = () => {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        padding: 8,
-        backgroundColor: "white",
       }}
     >
       <FolderCreationModal

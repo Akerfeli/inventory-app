@@ -89,7 +89,7 @@ const FolderSelection = ({
             color="#000"
             size={16}
           />
-          <Text>Back</Text>
+          <Text style={styles.text}>Back</Text>
         </View>
       </TouchableOpacity>
     );
@@ -99,7 +99,7 @@ const FolderSelection = ({
     return (
       <TouchableOpacity onPress={onAddFolderPressed}>
         <View style={styles.addRow}>
-          <Text>+ Add Folder</Text>
+          <Text style={styles.text}>+ Add Folder</Text>
         </View>
       </TouchableOpacity>
     );
@@ -119,7 +119,7 @@ const FolderSelection = ({
               color={Colors.secondary}
               size={24}
             />
-            <Text>{currentOpenFolder?.name}</Text>
+            <Text style={styles.text}>{currentOpenFolder?.name}</Text>
           </View>
           <Icon
             name="keyboard-arrow-up"
@@ -144,7 +144,7 @@ const FolderSelection = ({
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => handleFolderSelect(item.id)}>
                 <View style={styles.listItem}>
-                  <Text>{item?.name}</Text>
+                  <Text style={styles.text}>{item?.name}</Text>
                 </View>
               </TouchableOpacity>
             )}
@@ -165,7 +165,7 @@ const FolderSelection = ({
             color={Colors.secondary}
             size={24}
           />
-          <Text>{currentOpenFolder?.name}</Text>
+          <Text style={styles.text}>{currentOpenFolder?.name}</Text>
         </View>
         <Icon
           name="keyboard-arrow-down"
@@ -181,7 +181,7 @@ const FolderSelection = ({
     return (
       <ActivityIndicator
         style={styles.loader}
-        size="large"
+        size="small"
         color={Colors.primary}
       />
     );
@@ -195,6 +195,7 @@ const FolderSelection = ({
 };
 
 const styles = StyleSheet.create({
+  text: { fontSize: 16 },
   container: {
     borderRadius: 16,
     borderWidth: 2,
@@ -242,6 +243,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     padding: 8,
+    paddingLeft: 24,
   },
 });
 

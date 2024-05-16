@@ -6,6 +6,7 @@ import AmountButton from "./AmountButton";
 import CategorySelection from "./CategorySelection";
 import CustomTextInput from "./CustomTextInput";
 import FolderSelection from "./FolderSelection";
+import { useAuth } from "../contexts/AuthContext";
 import { Styles, Colors } from "../globalStyles";
 
 const ItemForm = ({
@@ -16,18 +17,22 @@ const ItemForm = ({
   selectedFolderId,
   setSelectedFolderId,
 }) => {
+  const { userState } = useAuth();
   const [inputErrors, setInputErrors] = useState({});
   const [formData, setFormData] = useState({
     name: "",
-    folderId: selectedFolderId, //ToDo: check if it auto updates
+    parentId: selectedFolderId, //ToDo: check if it auto updates
     amount: 1,
     description: "",
     category: "",
-    isFavorite: false,
-    isInShoppingList: false,
+    favoriteList: false,
+    shoppingListStatus: "notListed",
+    createdBy: userState.id,
   });
 
-  // ToDo: set root folder as default or if folder id does not exist
+  useEffect(() => {
+    handleChange("parentId", selectedFolderId);
+  }, [selectedFolderId]);
 
   // Set initial data if it exists
   useEffect(() => {
@@ -42,7 +47,7 @@ const ItemForm = ({
       errors.name = "Name is required";
     }
 
-    if (formData.amount.trim() === "") {
+    if (!formData.amount) {
       errors.amount = "Amount is required";
     } else if (isNaN(parseInt(formData.amount))) {
       errors.amount = "Amount must be a number"; //ToDo: Should we allow floats?
@@ -63,6 +68,11 @@ const ItemForm = ({
       ...formData,
       [field]: value,
     });
+  };
+
+  const handleShoppingListChange = (value) => {
+    const shoppingListStatus = value ? "toBuy" : "notListed";
+    handleChange("shoppingListStatus", shoppingListStatus);
   };
 
   return (
@@ -116,11 +126,11 @@ const ItemForm = ({
         {/*ToDo: add error message for amount*/}
       </View>
       <CheckBox
-        checked={formData.isInShoppingList}
+        checked={formData.shoppingListStatus === "toBuy"}
         title="In shopping list"
         checkedColor={Colors.primary}
         onPress={() =>
-          handleChange("isInShoppingList", !formData.isInShoppingList)
+          handleShoppingListChange(formData.shoppingListStatus !== "toBuy")
         }
         containerStyle={{
           backgroundColor: "transparent",
@@ -130,7 +140,7 @@ const ItemForm = ({
       />
       <CheckBox
         title="Favorite"
-        checked={formData.isFavorite}
+        checked={formData.favoriteList}
         checkedIcon="heart"
         uncheckedIcon="heart-o"
         checkedColor={Colors.accent}
@@ -139,7 +149,7 @@ const ItemForm = ({
           marginLeft: 0,
           padding: 0,
         }}
-        onPress={() => handleChange("isFavorite", !formData.isFavorite)}
+        onPress={() => handleChange("favoriteList", !formData.favoriteList)}
       />
       <TouchableOpacity
         style={[Styles.primaryButton, { marginTop: 16 }]}
