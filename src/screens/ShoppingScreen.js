@@ -74,11 +74,11 @@ const ShoppingScreen = () => {
   const toggleItemCheck = (item) => {
     const newStatus =
       item.shoppingListStatus === "toBuy" ? "completed" : "toBuy";
-    editItem(item.id, item.parentID, { shoppingListStatus: newStatus });
+    editItem(item.id, item.parentId, { shoppingListStatus: newStatus });
   };
 
   const removeItemFromShoppingList = (item) => {
-    editItem(item.id, item.parentID, { shoppingListStatus: "notListed" });
+    editItem(item.id, item.parentId, { shoppingListStatus: "notListed" });
   };
 
   const handleChangeAmount = (itemId, amount) => {

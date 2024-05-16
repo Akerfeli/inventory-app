@@ -18,6 +18,8 @@ import ShoppingScreen from "./src/screens/ShoppingScreen";
 import SignInScreen from "./src/screens/SignInScreen";
 import SignUpScreen from "./src/screens/SignUpScreen";
 import "react-native-reanimated";
+import useFetch from "./src/hooks/useFetch";
+import { deleteFolder, getFolderIds } from "./src/services/firebaseService";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -67,6 +69,14 @@ export default function App() {
 function AppContent() {
   const { userState } = useAuth();
 
+  getFolderIds("M2UsMeNZ6X1O8qWJoT80");
+
+  /*   getFolderIds("hMJWNp4qoL9LMtRq5WWf")
+    .then((folderIds) => {
+      console.log("All folder IDs:", folderIds);
+      // Now you have all the folder IDs, you can process them as needed
+    })
+    .catch((error) => console.error("Error collecting folder IDs:", error)); */
   return (
     <>
       {!userState.isSignedIn ? (
