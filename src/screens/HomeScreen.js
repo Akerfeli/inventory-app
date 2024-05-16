@@ -35,7 +35,7 @@ const HomeScreen = () => {
   console.log("loading subfolder", dataSubfolders);
 
   const flatContent = useMemo(() => {
-    if (!isLoading || !dataSubfolders || !dataItems) {
+    if (isLoading || !dataSubfolders || !dataItems) {
       return null;
     }
 
