@@ -15,51 +15,16 @@ import { Styles, Colors } from "../globalStyles";
 import useFetch from "../hooks/useFetch";
 import {
   editItem,
-  getItemsToBuy,
   updateShoppingListStatus,
 } from "../services/firebaseService";
+import { getItemsToBuy } from "../services/firebaseNewService";
+import useNewFetch from "../hooks/useNewFetch";
 
 const ShoppingScreen = () => {
   const { userState } = useAuth();
-  const { data, isLoading, error } = useFetch({
-    firebaseFunction: () => getItemsToBuy(userState.id),
-  });
 
-  /*
-  const mockData = [
-    {
-      id: "1",
-      name: "Milk",
-      amount: 1,
-      description: "1 liter",
-      category: "Dairy",
-      ShoppingListStatus: "toBuy",
-    },
-    {
-      id: "2",
-      name: "Bread",
-      amount: 2,
-      description: "Whole wheat",
-      category: "Bakery",
-      ShoppingListStatus: "toBuy",
-    },
-    {
-      id: "3",
-      name: "Apples",
-      amount: 3,
-      description: "Red apples",
-      category: "Fruit",
-      ShoppingListStatus: "toBuy",
-    },
-    {
-      id: "4",
-      name: "Eggs",
-      amount: 12,
-      description: "Large eggs",
-      category: "Dairy",
-      ShoppingListStatus: "completed",
-    },
-  ];*/
+  const params = [userState.id];
+  const { data, isLoading, error } = useNewFetch(getItemsToBuy, params);
 
   const removeCompleted = () => {
     const completedItems = [];

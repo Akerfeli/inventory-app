@@ -3,14 +3,14 @@ import { View, ActivityIndicator, Text, StyleSheet } from "react-native";
 
 import FolderContent from "../components/FolderContent";
 import { useAuth } from "../contexts/AuthContext";
-import useFetch from "../hooks/useFetch";
-import { getFavorites } from "../services/firebaseService";
+import useNewFetch from "../hooks/useNewFetch";
+import { getFavorites } from "../services/firebaseNewService";
 
 const FavoritesScreen = () => {
   const { userState } = useAuth();
-  const { data, isLoading, error } = useFetch({
-    firebaseFunction: () => getFavorites(userState.id),
-  });
+  const params = [userState.id];
+
+  const { data, isLoading, error } = useNewFetch(getFavorites, params);
 
   console.log(data);
 
