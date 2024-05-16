@@ -4,6 +4,13 @@ how many pieces of the item they have, and whether they need to buy more.
 
 By keeping the information in the app updated, the user can save a lot of time and frustration by not having to search for those "I-know-I-have-one-but-where-did-I-put-it" items.
 
+## Table of Contents
+- [Installation](#installation)
+- [Features](#features)
+- [Usage](#usage)
+- [Future features and improvements](#future-features-and-improvements)
+- [Screenshots](#screenshots)
+
 ## Installation
 
 ### Install app
