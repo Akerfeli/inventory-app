@@ -12,17 +12,15 @@ import {
 import ObjectListItem from "../components/ObjectListItem";
 import { useAuth } from "../contexts/AuthContext";
 import { Styles, Colors } from "../globalStyles";
-import useFetch from "../hooks/useFetch";
+import useNewFetch from "../hooks/useNewFetch";
+import { getItemsToBuy } from "../services/firebaseNewService";
 import {
   editItem,
   updateShoppingListStatus,
 } from "../services/firebaseService";
-import { getItemsToBuy } from "../services/firebaseNewService";
-import useNewFetch from "../hooks/useNewFetch";
 
 const ShoppingScreen = () => {
   const { userState } = useAuth();
-
   const params = [userState.id];
   const { data, isLoading, error } = useNewFetch(getItemsToBuy, params);
 
