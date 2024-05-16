@@ -5,6 +5,7 @@ import { View, FlatList, StyleSheet, Text } from "react-native";
 
 import FolderListItem from "./FolderListItem";
 import ObjectListItem from "./ObjectListItem";
+import { deleteFolder } from "../services/firebaseService";
 
 const FolderContent = ({
   folderData,
@@ -25,7 +26,9 @@ const FolderContent = ({
 
   const handleDelete = (itemId, itemType) => {
     if (itemType === "folder") {
-      onDeleteFolder(itemId);
+      //onDeleteFolder(itemId);
+      console.log("Inside haldleDelete:", itemId, itemType);
+      deleteFolder(itemId);
     } else {
       onDeleteItem(itemId);
     }
