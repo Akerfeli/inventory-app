@@ -177,7 +177,15 @@ async function deleteDocumentByPath(collectionPath) {
 }
 
 export async function deleteFolder(topFolderId) {
-  const rootFolderId = topFolderId.parentID;
+  // Get the document reference for the top folder
+  const topFolderRef = doc(db, "folder-data", topFolderId);
+
+  // Get the top folder document
+  const topFolderDoc = await getDoc(topFolderRef);
+
+  // Get the parentId from the top folder document
+  const parentFolderId = topFolderDoc.data().parentId;
+
   try {
     const folderIds = await getFolderIds(topFolderId);
     const batch = writeBatch(db);
@@ -201,17 +209,13 @@ export async function deleteFolder(topFolderId) {
     }
 
     //Delete the reference from  the root folders subfolders
-    
 
-    const rootSubfoldersQuery = query(
-      collection(db, `folder-data/${rootFolderId}/subfolders`),
+    const parentSubfoldersQuery = query(
+      collection(db, `folder-data/${parentFolderId}/subfolders`),
       where("folderId", "==", topFolderId)
     );
 
-    const subfoldersSnapshot = await getDocs(rootSubfoldersQuery);
-
-    console.log("rootFolderId", rootFolderId);
-    console.log("SubFolder", subfoldersSnapshot.docs);
+    const subfoldersSnapshot = await getDocs(parentSubfoldersQuery);
 
     if (!subfoldersSnapshot.empty) {
       const subfolderDoc = subfoldersSnapshot.docs[0];
