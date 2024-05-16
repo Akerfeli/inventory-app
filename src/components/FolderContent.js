@@ -5,7 +5,11 @@ import { View, FlatList, StyleSheet, Text } from "react-native";
 
 import FolderListItem from "./FolderListItem";
 import ObjectListItem from "./ObjectListItem";
-import { deleteFolder } from "../services/firebaseService";
+import {
+  deleteDocumentById,
+  deleteFolder,
+  getItemById,
+} from "../services/firebaseService";
 
 const FolderContent = ({
   folderData,
@@ -24,13 +28,15 @@ const FolderContent = ({
     });
   };
 
-  const handleDelete = (itemId, itemType) => {
-    if (itemType === "folder") {
+  const handleDelete = async (item) => {
+    if (item.type === "folder") {
       //onDeleteFolder(itemId);
-      console.log("Inside haldleDelete:", itemId, itemType);
-      deleteFolder(itemId);
+      console.log("Inside haldleDelete:", item.id, item.type);
+      deleteFolder(item.id);
     } else {
-      onDeleteItem(itemId);
+      const parentId = item.parentId;
+      console.log(parentId);
+      deleteDocumentById(`folder-data/${parentId}/items`, item.id);
     }
   };
 
@@ -44,7 +50,7 @@ const FolderContent = ({
     };
 
     const handleDeletePress = () => {
-      handleDelete(item.id, item.type);
+      handleDelete(item);
     };
 
     const rightContent = (
