@@ -15,15 +15,16 @@ import { Styles, Colors } from "../globalStyles";
 import useFetch from "../hooks/useFetch";
 import {
   editItem,
-  getItemsToBuy,
   updateShoppingListStatus,
 } from "../services/firebaseService";
+import { getItemsToBuy } from "../services/firebaseNewService";
+import useNewFetch from "../hooks/useNewFetch";
 
 const ShoppingScreen = () => {
   const { userState } = useAuth();
-  const { data, isLoading, error } = useFetch({
-    firebaseFunction: () => getItemsToBuy(userState.id),
-  });
+
+  const params = [userState.id];
+  const { data, isLoading, error } = useNewFetch(getItemsToBuy, params);
 
   /*
   const mockData = [
