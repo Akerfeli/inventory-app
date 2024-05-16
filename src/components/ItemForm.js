@@ -25,8 +25,8 @@ const ItemForm = ({
     amount: 1,
     description: "",
     category: "",
-    isFavorite: false,
-    isInShoppingList: false,
+    favoriteList: false,
+    shoppingListStatus: "notListed",
     createdBy: userState.id,
   });
 
@@ -68,6 +68,11 @@ const ItemForm = ({
       ...formData,
       [field]: value,
     });
+  };
+
+  const handleShoppingListChange = (value) => {
+    const shoppingListStatus = value ? "toBuy" : "notListed";
+    handleChange("shoppingListStatus", shoppingListStatus);
   };
 
   return (
@@ -121,12 +126,10 @@ const ItemForm = ({
         {/*ToDo: add error message for amount*/}
       </View>
       <CheckBox
-        checked={formData.isInShoppingList}
+        checked={formData.shoppingListStatus === "toBuy"}
         title="In shopping list"
         checkedColor={Colors.primary}
-        onPress={() =>
-          handleChange("isInShoppingList", !formData.isInShoppingList)
-        }
+        onPress={() => handleShoppingListChange(!formData.isInShoppingList)}
         containerStyle={{
           backgroundColor: "transparent",
           marginLeft: 0,
