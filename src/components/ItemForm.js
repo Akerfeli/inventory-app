@@ -129,7 +129,9 @@ const ItemForm = ({
         checked={formData.shoppingListStatus === "toBuy"}
         title="In shopping list"
         checkedColor={Colors.primary}
-        onPress={() => handleShoppingListChange(!formData.isInShoppingList)}
+        onPress={() =>
+          handleShoppingListChange(formData.shoppingListStatus === "toBuy")
+        }
         containerStyle={{
           backgroundColor: "transparent",
           marginLeft: 0,
@@ -138,7 +140,7 @@ const ItemForm = ({
       />
       <CheckBox
         title="Favorite"
-        checked={formData.isFavorite}
+        checked={formData.favoriteList}
         checkedIcon="heart"
         uncheckedIcon="heart-o"
         checkedColor={Colors.accent}
@@ -147,7 +149,7 @@ const ItemForm = ({
           marginLeft: 0,
           padding: 0,
         }}
-        onPress={() => handleChange("isFavorite", !formData.isFavorite)}
+        onPress={() => handleChange("favoriteList", !formData.favoriteList)}
       />
       <TouchableOpacity
         style={[Styles.primaryButton, { marginTop: 16 }]}
