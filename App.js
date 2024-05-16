@@ -17,6 +17,8 @@ import ShoppingScreen from "./src/screens/ShoppingScreen";
 import SignInScreen from "./src/screens/SignInScreen";
 import SignUpScreen from "./src/screens/SignUpScreen";
 import "react-native-reanimated";
+import useFetch from "./src/hooks/useFetch";
+import { getAllFolders } from "./src/services/firebaseService";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -63,6 +65,12 @@ export default function App() {
 
 function AppContent() {
   const { userState } = useAuth();
+
+  const { data } = useFetch(getAllFolders, userState.id);
+
+  if (data !== null) {
+    console.log(data);
+  }
 
   return (
     <>

@@ -13,6 +13,7 @@ import {
   getDoc,
   setDoc,
   serverTimestamp,
+  onSnapshot,
 } from "firebase/firestore";
 
 import { db } from "../../firebaseConfig";
@@ -35,6 +36,21 @@ const fetchData = async (q) => {
   } catch (error) {
     console.error("Error fetching response:", error);
   }
+};
+
+const listenForChanges = async (query, setData) => {
+  const unsubscribe = onSnapshot(query, (snapshot) => {
+    const newData = [];
+    snapshot.forEach((doc) => {
+      newData.push({
+        id: doc.id,
+        ...doc.data(),
+      });
+    });
+    setData(newData);
+  });
+
+  return unsubscribe;
 };
 
 /*----------------------- GETS -----------------------*/
@@ -95,6 +111,18 @@ export const getFolderContentByDocId = async (documentId) => {
   return await fetchData(q);
 };
 
+/* export const getItemsToBuy = async (uid, setData) => {
+  console.log(uid);
+  const statuses = ["toBuy", "completed"];
+  const q = query(
+    collectionGroup(db, "items"),
+    where("createdBy", "==", uid),
+    where("shoppingListStatus", "in", statuses)
+  );
+  return await listenForChanges(q, setData);
+};
+ */
+
 export const getItemsToBuy = async (uid) => {
   const statuses = ["toBuy", "completed"];
   const q = query(
@@ -114,10 +142,11 @@ export const getFavorites = async (uid) => {
   return await fetchData(q);
 };
 
-export const getAllFolders = async (uid) => {
+export const getAllFolders = async (uid, setData) => {
+  console.log(uid);
   const q = query(collection(db, "folder-data"), where("createdBy", "==", uid));
 
-  return await fetchData(q);
+  return await listenForChanges(q, setData);
 };
 
 export const getItemsByCategory = async (uid, category) => {
