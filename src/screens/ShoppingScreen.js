@@ -26,42 +26,6 @@ const ShoppingScreen = () => {
   const params = [userState.id];
   const { data, isLoading, error } = useNewFetch(getItemsToBuy, params);
 
-  /*
-  const mockData = [
-    {
-      id: "1",
-      name: "Milk",
-      amount: 1,
-      description: "1 liter",
-      category: "Dairy",
-      ShoppingListStatus: "toBuy",
-    },
-    {
-      id: "2",
-      name: "Bread",
-      amount: 2,
-      description: "Whole wheat",
-      category: "Bakery",
-      ShoppingListStatus: "toBuy",
-    },
-    {
-      id: "3",
-      name: "Apples",
-      amount: 3,
-      description: "Red apples",
-      category: "Fruit",
-      ShoppingListStatus: "toBuy",
-    },
-    {
-      id: "4",
-      name: "Eggs",
-      amount: 12,
-      description: "Large eggs",
-      category: "Dairy",
-      ShoppingListStatus: "completed",
-    },
-  ];*/
-
   const removeCompleted = () => {
     const completedItems = [];
     data.forEach((item) => {
