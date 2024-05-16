@@ -59,6 +59,7 @@ If the phone and the computer are in different networks:
 - Show items based on category
 - Search and filter items
 - Prevent duplicates
+- Optimistic updates on all screens
 
 
 
