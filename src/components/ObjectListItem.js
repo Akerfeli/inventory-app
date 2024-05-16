@@ -6,7 +6,7 @@ import AmountButton from "./AmountButton";
 import { Colors } from "../globalStyles";
 import { editItem } from "../services/firebaseService";
 
-const ObjectListItem = ({ item, onEditPressed, changeAmount }) => {
+const ObjectListItem = ({ item, onEditPressed }) => {
   const renderLeftContainer = () => {
     return (
       <View style={styles.leftContainer}>
@@ -26,6 +26,19 @@ const ObjectListItem = ({ item, onEditPressed, changeAmount }) => {
     );
   };
 
+  const handleChangeAmount = async (newAmount) => {
+    try {
+      await editItem(item.id, item.parentId, {
+        amount: newAmount,
+      });
+    } catch (error) {
+      console.log(
+        "An error occurred when changing value for amount in item:",
+        error
+      );
+    }
+  };
+
   const handleFavoritePressed = async () => {
     try {
       await editItem(item.id, item.parentId, {
@@ -42,10 +55,7 @@ const ObjectListItem = ({ item, onEditPressed, changeAmount }) => {
   const renderRightContainer = () => {
     return (
       <View style={[styles.rightContainer]}>
-        <AmountButton
-          amount={item.amount}
-          changeAmount={(newAmount) => changeAmount(item.id, newAmount)}
-        />
+        <AmountButton amount={item.amount} changeAmount={handleChangeAmount} />
         <CheckBox
           checked={item.favoriteList}
           checkedIcon="heart"
