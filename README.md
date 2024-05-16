@@ -44,6 +44,7 @@ If the phone and the computer are in different networks:
 - To add a folder, press the green folder in the top right corner and provide a folder name.
 - To add an item press the ➕-sign in the bottom menu and provide the information about the item. The item will be added in the current folder unless you choose another folder. You can also add a new folder
   to put the new item in.
+- (OBS) we have a bug where new users folders and items won't show up sign out and in again and this will fix it 
 - Delete an item or folder by swiping left and pressing *Delete*. Deleting a folder will delete all items and subfolders in that folder.
 - Press the ❤️ in the bottom menu to look at your favorites. Register or unrigister an item as a favorite by pressing the ❤️ next to the item.
 - Press the 📃-symbol in the bottom menu to look at your shopping list. When you have purchased an item you can check the box next to the item. To remove all checked items, press the *Remove checked items*-button
