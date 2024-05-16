@@ -11,8 +11,8 @@ import { Styles, Colors } from "../globalStyles";
 
 const ItemForm = ({
   onSubmit,
-  onReset,
-  initialData,
+  resetForm,
+  initialData, //ToDo: implement with edit item
   onAddFolderPressed,
   selectedFolderId,
   setSelectedFolderId,
@@ -21,7 +21,7 @@ const ItemForm = ({
   const [inputErrors, setInputErrors] = useState({});
   const [formData, setFormData] = useState({
     name: "",
-    parentId: selectedFolderId, //ToDo: check if it auto updates
+    parentId: selectedFolderId,
     amount: 1,
     description: "",
     category: "",
@@ -34,12 +34,20 @@ const ItemForm = ({
     handleChange("parentId", selectedFolderId);
   }, [selectedFolderId]);
 
-  // Set initial data if it exists
+  // Reset form
   useEffect(() => {
-    if (initialData) {
-      setFormData(initialData);
-    }
-  }, [initialData]);
+    setFormData({
+      name: "",
+      parentId: selectedFolderId, // If we think the user wants the same folder?
+      amount: 1,
+      description: "",
+      category: "",
+      favoriteList: false,
+      shoppingListStatus: "notListed",
+      createdBy: userState.id,
+    });
+    setInputErrors({});
+  }, [resetForm]);
 
   const validateForm = () => {
     const errors = {};

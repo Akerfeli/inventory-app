@@ -1,6 +1,13 @@
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import React, { useState, useCallback } from "react";
-import { View, TouchableWithoutFeedback, Keyboard } from "react-native";
+import {
+  View,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 import FolderCreationModal from "../components/FolderCreationModal";
@@ -14,6 +21,9 @@ const AddNewScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [initialFormData, setInitialFormData] = useState({}); //ToDo: add something here?
   const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [resetForm, setResetForm] = useState(null);
 
   // On focus, update navigatedFolderId
   useFocusEffect(
@@ -43,12 +53,40 @@ const AddNewScreen = () => {
     try {
       setIsLoading(true);
       await createItem(formData);
+
+      // Set a timeout to reset the state after three seconds
+      const timeout = setTimeout(() => {
+        setSuccessMessage(null);
+        setErrorMessage(null);
+      }, 3000);
+
+      setSuccessMessage("Item added successfully!");
     } catch (error) {
       console.log("Error when creating item:", error);
+      setErrorMessage(
+        "An error occurred while adding the item. Please try again later."
+      );
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Fallback, if loading
+  if (isLoading) {
+    return (
+      <View style={styles.centerContainer}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  if (errorMessage || successMessage) {
+    return (
+      <View style={styles.centerContainer}>
+        <Text>{errorMessage ? errorMessage : successMessage}</Text>
+      </View>
+    );
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -71,10 +109,19 @@ const AddNewScreen = () => {
           selectedFolderId={selectedFolderId}
           setSelectedFolderId={setSelectedFolderId}
           onSubmit={handleSubmit}
+          resetForm={resetForm}
         />
       </View>
     </TouchableWithoutFeedback>
   );
 };
+
+const styles = StyleSheet.create({
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default AddNewScreen;
