@@ -28,7 +28,7 @@ const ObjectListItem = ({ item, onEditPressed, changeAmount }) => {
 
   const handleFavoritePressed = async () => {
     try {
-      await editItem(item.id, item.parentID, {
+      await editItem(item.id, item.parentId, {
         favoriteList: !item.favoriteList,
       });
     } catch (error) {

@@ -432,7 +432,7 @@ export const updateShoppingListStatus = async (items) => {
     // Iterate over the items array
     items.forEach((item) => {
       // Reference to the item document
-      const itemRef = doc(db, "folder-data", item.parentID, "items", item.id);
+      const itemRef = doc(db, "folder-data", item.parentId, "items", item.id);
 
       // Update the shoppingListStatus field to "notListed"
       batchedWrite.update(itemRef, { shoppingListStatus: "notListed" });
