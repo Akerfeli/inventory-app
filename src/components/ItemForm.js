@@ -6,6 +6,7 @@ import AmountButton from "./AmountButton";
 import CategorySelection from "./CategorySelection";
 import CustomTextInput from "./CustomTextInput";
 import FolderSelection from "./FolderSelection";
+import { useAuth } from "../contexts/AuthContext";
 import { Styles, Colors } from "../globalStyles";
 
 const ItemForm = ({
@@ -16,18 +17,22 @@ const ItemForm = ({
   selectedFolderId,
   setSelectedFolderId,
 }) => {
+  const { userState } = useAuth();
   const [inputErrors, setInputErrors] = useState({});
   const [formData, setFormData] = useState({
     name: "",
-    folderId: selectedFolderId, //ToDo: check if it auto updates
+    parentId: selectedFolderId, //ToDo: check if it auto updates
     amount: 1,
     description: "",
     category: "",
     isFavorite: false,
     isInShoppingList: false,
+    createdBy: userState.id,
   });
 
-  // ToDo: set root folder as default or if folder id does not exist
+  useEffect(() => {
+    handleChange("parentId", selectedFolderId);
+  }, [selectedFolderId]);
 
   // Set initial data if it exists
   useEffect(() => {
@@ -42,7 +47,7 @@ const ItemForm = ({
       errors.name = "Name is required";
     }
 
-    if (formData.amount.trim() === "") {
+    if (!formData.amount) {
       errors.amount = "Amount is required";
     } else if (isNaN(parseInt(formData.amount))) {
       errors.amount = "Amount must be a number"; //ToDo: Should we allow floats?

@@ -350,7 +350,7 @@ export const createRootFolder = async (uid) => {
   }
 };
 
-export const createItem = async (uid, fieldInfo) => {
+export const createItem = async (fieldInfo) => {
   try {
     const { parentId, ...otherFields } = fieldInfo;
 
@@ -361,7 +361,6 @@ export const createItem = async (uid, fieldInfo) => {
 
     // Construct the item data
     const itemData = {
-      createdBy: uid,
       parentId,
       timeCreated: serverTimestamp(),
       ...otherFields,
