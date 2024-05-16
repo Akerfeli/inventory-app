@@ -49,6 +49,9 @@ const HomeScreen = () => {
   const renderEmptyPrompt = () => {
     return (
       <View style={styles.emptyPrompt}>
+        <Text style={Styles.heading}>
+          If nothing works try sign out and sign in again!
+        </Text>
         <Text style={Styles.heading}>Add an item here</Text>
         <Icon
           name="long-arrow-alt-down"
