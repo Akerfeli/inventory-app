@@ -130,7 +130,7 @@ const ItemForm = ({
         title="In shopping list"
         checkedColor={Colors.primary}
         onPress={() =>
-          handleShoppingListChange(formData.shoppingListStatus === "toBuy")
+          handleShoppingListChange(formData.shoppingListStatus !== "toBuy")
         }
         containerStyle={{
           backgroundColor: "transparent",
