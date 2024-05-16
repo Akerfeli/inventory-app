@@ -3,12 +3,13 @@ import {
   TextInput,
   View,
   Text,
-  FlatList,
   TouchableOpacity,
   StyleSheet,
+  FlatList,
 } from "react-native";
 
 import { useAuth } from "../contexts/AuthContext";
+import { Colors } from "../globalStyles";
 import { getCategories } from "../services/firebaseService";
 
 const CategorySelection = ({ onSelectCategory, selectedCategory }) => {
@@ -26,7 +27,7 @@ const CategorySelection = ({ onSelectCategory, selectedCategory }) => {
       setFilteredCategories(fetchedCategories);
     };
 
-    fetchCategories();
+    fetchCategories(); // ToDo: switch this for use fetch?
   }, []);
 
   useEffect(() => {
@@ -64,6 +65,7 @@ const CategorySelection = ({ onSelectCategory, selectedCategory }) => {
         placeholder="Type or select category"
         value={inputText}
         onChangeText={handleInputChange}
+        placeholderTextColor="#aaa"
         onFocus={handleInputFocus} // Call handleInputFocus when input is focused
         onBlur={handleInputBlur} // Call handleInputBlur when input loses focus
         style={[
@@ -94,28 +96,26 @@ const CategorySelection = ({ onSelectCategory, selectedCategory }) => {
 const styles = StyleSheet.create({
   textInputContainer: {
     backgroundColor: "white",
-    padding: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: "#fff",
+    minHeight: 40,
   },
-  textInputContainerOpen: {
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-  },
+  textInputContainerOpen: { borderColor: Colors.secondary },
   container: {
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    width: "80%",
+    borderRadius: 16,
+    width: "100%",
     overflow: "hidden",
+    backgroundColor: "white",
   },
   listContainer: {
-    borderTopWidth: 1,
-    borderColor: "#ccc",
     backgroundColor: "white",
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
   },
   listItem: {
-    padding: 8,
+    padding: 12,
   },
 });
 

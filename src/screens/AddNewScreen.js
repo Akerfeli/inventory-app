@@ -1,6 +1,11 @@
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import React, { useState, useCallback } from "react";
-import { Button, View, TouchableWithoutFeedback, Keyboard } from "react-native";
+import {
+  View,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ScrollView,
+} from "react-native";
 
 import FolderCreationModal from "../components/FolderCreationModal";
 import ItemForm from "../components/ItemForm";
@@ -12,7 +17,6 @@ const AddNewScreen = () => {
   const [selectedFolderId, setSelectedFolderId] = useState(
     "M2UsMeNZ6X1O8qWJoT80"
   );
-  const [folderStructure, setFolderStructure] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [initialFormData, setInitialFormData] = useState({}); //ToDo: add something here?
 
@@ -44,22 +48,36 @@ const AddNewScreen = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <FolderCreationModal
-          modalVisible={modalVisible}
-          onClose={() => setModalVisible(false)}
-          parentFolder={selectedFolderId}
-          onAdded={() => setModalVisible(false)}
-        />
-        <ItemForm />
-        <Button
-          title="Add new"
-          onPress={() =>
-            navigation.navigate("Item", { folderId: navigatedFolderId })
-          }
-        />
-        <Button title="Add new folder" onPress={() => setModalVisible(true)} />
-      </View>
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          paddingBottom: 24,
+        }}
+        overScrollMode="never"
+      >
+        <View
+          style={{
+            flex: 1,
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <FolderCreationModal
+            modalVisible={modalVisible}
+            onClose={() => setModalVisible(false)}
+            parentFolder={selectedFolderId}
+            onAdded={() => setModalVisible(false)}
+          />
+          <ItemForm
+            onAddFolderPressed={() => setModalVisible(true)}
+            selectedFolderId={selectedFolderId}
+            setSelectedFolderId={setSelectedFolderId}
+          />
+        </View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 };

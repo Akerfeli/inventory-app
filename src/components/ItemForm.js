@@ -1,23 +1,33 @@
-import { Icon, CheckBox } from "@rneui/themed";
+import { CheckBox } from "@rneui/themed";
 import React, { useState, useEffect } from "react";
 import { TouchableOpacity, View, Text } from "react-native";
 
 import AmountButton from "./AmountButton";
-import CustomTextInput from "./CustomTextInput";
-import { Styles, Colors } from "../globalStyles";
 import CategorySelection from "./CategorySelection";
+import CustomTextInput from "./CustomTextInput";
+import FolderSelection from "./FolderSelection";
+import { Styles, Colors } from "../globalStyles";
 
-const ItemForm = ({ onSubmit, onReset, initialData }) => {
+const ItemForm = ({
+  onSubmit,
+  onReset,
+  initialData,
+  onAddFolderPressed,
+  selectedFolderId,
+  setSelectedFolderId,
+}) => {
   const [inputErrors, setInputErrors] = useState({});
   const [formData, setFormData] = useState({
     name: "",
-    folderId: "",
+    folderId: selectedFolderId, //ToDo: check if it auto updates
     amount: 1,
     description: "",
     category: "",
     isFavorite: false,
     isInShoppingList: false,
   });
+
+  // ToDo: set root folder as default or if folder id does not exist
 
   // Set initial data if it exists
   useEffect(() => {
@@ -62,11 +72,18 @@ const ItemForm = ({ onSubmit, onReset, initialData }) => {
         justifyContent: "center",
         flex: 1,
         width: "80%",
-        gap: 16,
+        gap: 8,
         paddingVertical: 16,
+        marginTop: 8,
       }}
     >
-      {/*ToDo: Add folder selection*/}
+      <View style={{ marginBottom: 16 }}>
+        <FolderSelection
+          selectedFolderId={formData.selectedFolderId}
+          onSelectFolder={(folderId) => setSelectedFolderId(folderId)}
+          onAddFolderPressed={onAddFolderPressed}
+        />
+      </View>
       <CustomTextInput
         label="Name"
         placeholder="Name"
@@ -74,6 +91,21 @@ const ItemForm = ({ onSubmit, onReset, initialData }) => {
         onChangeText={(value) => handleChange("name", value)}
         error={inputErrors?.name}
       />
+      <CustomTextInput
+        label="Description"
+        placeholder="Description"
+        value={formData.description}
+        onChangeText={(value) => handleChange("description", value)}
+        error={inputErrors?.description}
+        rows={4}
+      />
+      <View style={{ marginBottom: 32 }}>
+        <Text style={Styles.textLabel}>Category</Text>
+        <CategorySelection
+          selectedCategory={formData.category}
+          onSelectCategory={(value) => handleChange("category", value)}
+        />
+      </View>
       <View style={{ marginBottom: 16 }}>
         <Text style={Styles.textLabel}>Amount</Text>
         <AmountButton
@@ -82,18 +114,6 @@ const ItemForm = ({ onSubmit, onReset, initialData }) => {
         />
         {/*ToDo: add error message for amount*/}
       </View>
-      <CustomTextInput
-        label="Description"
-        placeholder="Description"
-        value={formData.description}
-        onChangeText={(value) => handleChange("description", value)}
-        error={inputErrors?.description}
-        rows={5}
-      />
-      <CategorySelection
-        selectedCategory={formData.category}
-        onSelectCategory={(value) => handleChange("category", value)}
-      />
       <CheckBox
         checked={formData.isInShoppingList}
         title="In shopping list"

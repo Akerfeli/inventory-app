@@ -39,11 +39,12 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   textInput: {
-    padding: 10, // ToDo: height = rows*something?
+    paddingHorizontal: 12, // ToDo: height = rows*something?
+    paddingVertical: 8,
     backgroundColor: "white",
     fontSize: 16,
     borderRadius: 16,
-    height: 40,
+    minHeight: 40,
     borderWidth: 2,
     marginBottom: 4,
   },

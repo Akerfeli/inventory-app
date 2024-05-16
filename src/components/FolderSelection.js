@@ -21,7 +21,7 @@ const folders = [
 const FolderSelection = ({
   selectedFolderId,
   onSelectFolder,
-  addFolderPressed,
+  onAddFolderPressed,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -62,7 +62,7 @@ const FolderSelection = ({
 
   const renderAddFolderRow = () => {
     return (
-      <TouchableOpacity onPress={addFolderPressed}>
+      <TouchableOpacity onPress={onAddFolderPressed}>
         <View style={styles.addRow}>
           <Text>+ Add Folder</Text>
         </View>
@@ -81,7 +81,7 @@ const FolderSelection = ({
             <Icon
               name="folder-outline"
               type="material-community"
-              color={Colors.primary}
+              color={Colors.secondary}
               size={24}
             />
             <Text>{currentOpenFolder.name}</Text>
@@ -145,10 +145,10 @@ const FolderSelection = ({
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 8,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: "#ccc",
-    width: "80%",
+    width: "100%",
     overflow: "hidden",
   },
   selected: {
@@ -156,12 +156,12 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 8,
     justifyContent: "space-between",
+    alignItems: "center",
   },
   selectedOpen: {
     flexDirection: "row",
     justifyContent: "space-between",
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    alignItems: "center",
     backgroundColor: Colors.tertiary,
     padding: 8,
   },
@@ -178,8 +178,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: "#ccc",
     backgroundColor: "white",
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
   },
   listItem: {
     padding: 8,
