@@ -74,7 +74,7 @@ const HomeScreen = () => {
       <FolderCreationModal
         modalVisible={modalVisible}
         onClose={() => setModalVisible(false)}
-        parentFolder="hMJWNp4qoL9LMtRq5WWf"
+        parentFolder={userState.root}
         onAdded={() => setModalVisible(false)}
       />
       {/*
